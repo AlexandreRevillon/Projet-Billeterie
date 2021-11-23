@@ -2,6 +2,10 @@
 <?php
 include "connexion.php";
 $con=connect();
+if (!$con) {
+    echo "Probleme de connexion à la base";
+    exit;
+ }
 ?>
 <h1 align="center">Abonnements</h1>
 <ul>

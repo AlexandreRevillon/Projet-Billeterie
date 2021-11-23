@@ -2,6 +2,10 @@
 <?php
 include "connexion.php";
 $con=connect();
+if (!$con) {
+    echo "Probleme de connexion à la base";
+    exit;
+ }
 ?>
 <h1 align="center"> Inscrivez-vous</h1>
 <form action="inscrire.php" method=POST>
@@ -23,6 +27,7 @@ $con=connect();
     <tr>
         <td> Confirmez votre mot de passe : </td><td><input type="password" name="mdp"></td>
     </tr>
-</table>
+</table></br>
+<input align="center" type="submit" value="S'inscrire">
 </form>
 </html>

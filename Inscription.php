@@ -50,6 +50,14 @@
             <td> Confirmez votre mot de passe : </td>
             <td><input type="password" name="mdp2" required></td>
         </tr>
+        <tr>
+            <td>Email : </td>
+            <td><input type="email" name="email" required></td>
+        </tr>
+        <tr>
+            <td> Confirmez votre email: </td>
+            <td><input type="email" name="email2" required></td>
+        </tr>
     </table>
 
     </br>

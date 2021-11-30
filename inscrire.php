@@ -38,6 +38,15 @@ if (!$con) {
     }
 
 
+//Vérification email identiques
+    if ($email != $email2) {
+        echo "<h2>Erreur lors de l'inscription : </h2>";
+        echo "<p>Les 2 emails ne sont pas identiques</p>";
+        echo "<a href='Inscription.php'>Retour au formulaire</a>";
+        exit;
+    }
+
+
 //Boucle d'incrémentation du numero unique(numu) associé à chaque utilisateur
     $numu="select max(numu) as max from utilisateur";
     $resultat=pg_query($numu);
@@ -52,7 +61,7 @@ if (!$con) {
 
 
 //Insertion du nouvel utilisateur dans la base
-    $sql="INSERT INTO utilisateur (numu, nom, prenom, dn, adresse, codep, codet, datedebutabo, password) VALUES ($id,'$nom','$prenom','$dn','$adresserue $codepostal','TP',NULL,NULL, '$mdp');";
+    $sql="INSERT INTO utilisateur (numu, nom, prenom, dn, adresse, codep, codet, datedebutabo, password, email) VALUES ($id,'$nom','$prenom','$dn','$adresserue $codepostal','TP',NULL,NULL, '$mdp', '$email');";
 
     $result=pg_query($sql);
 

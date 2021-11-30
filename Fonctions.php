@@ -1,21 +1,24 @@
 <?php
 
-function codep($date){
-    $now=time();
-    $date2=strtotime('$date');
-    $tmp=abs($now-$date2);
-    $tmp = floor($tmp/1000);    
-    $sec = $tmp % 60;
-    if (($sec>124144000) && ($sec<788400000))
-        return '4-25';
-    else{
-        if ($sec>2049840000)
-            return '65+';
-        else 
-            return 'TP';}
+function age($date) { 
+     $age = date('Y') - date('Y', strtotime($date)); 
+    if (date('md') < date('md', strtotime($date))) { 
+        return $age - 1; 
+    } 
+    return $age; 
 }
 
-function datedebutabo(){
-    return time();
+
+function codep($date){
+    $age = age($date);
+    if (($age>3) && ($age<26)){
+        return '4-25';
+    } else{
+        if ($age>25){
+            return '65+';
+        } else {
+            return 'TP';
+        }
+    }
 }
 ?>

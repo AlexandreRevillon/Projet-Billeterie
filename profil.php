@@ -107,7 +107,6 @@
 		<p>Nom: <?php echo $user['nom']; ?></p>
 		<p>Prénom: <?php echo $user['prenom']; ?></p>
 		<p>Date de naissance: <?php echo $user['dn']; ?></p>
-		<p>Profil : <?php echo codep($user['dn']) ; ?> </p>
 		<p>Adresse: <?php echo $user['adresse']; ?></p>
 		<p>Email: <?php echo $user['email']; ?></p>
 		<p>Numéro de Carte: <?php echo(isset($carte['numc'])) ? $carte['numc'] : "Pas de carte" ; ?></p>

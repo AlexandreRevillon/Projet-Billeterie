@@ -1,26 +1,23 @@
 <?php 
-	include "session.php"; 
+	include 'session.php';
+
+	session_destroy();
+
+	$_SESSION['user']='NA';
+	unset($_SESSION['nom']);
+	unset($_SESSION['prenom']);
  ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Abonnement</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-</head>
-<body>
-		
-	<?php
-	include "connexion.php";
-	$con=connect();
-	if (!$con) {
-	    echo "Probleme de connexion à la base";
-	    exit;
-	 }
-	?>
-	<!------------------------- Barre de navigation ------------------------->
+ <!DOCTYPE html>
+ <html lang="fr">
+ <head>
+ 	<meta charset="UTF-8">
+ 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 	<title>Déconnexion</title>
+ 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+ </head>
+ <body>
+	 <!------------------------- Barre de navigation ------------------------->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	  <div class="container-fluid">
 	    <a class="navbar-brand" href="index.php">Ilévia</a>
@@ -46,7 +43,6 @@
 	          </ul>
 	        </li>
 
-            
 	        <li class="nav-item">
 	            <?php 
 	                if ($_SESSION['user'] != 'NA') {
@@ -61,17 +57,18 @@
 
 	        <?php 
 	            if ($_SESSION['user'] != 'NA') {
-	                echo " <li class='nav-item'>";
+	            	echo " <li class='nav-item'>";
+	                    echo "<a class='nav-link active' href='disconnect.php'>Déconnexion</a>";
+	                echo "</li>";
+	            } else {
+	               	echo " <li class='nav-item'>";
 	                    echo "<a class='nav-link active' href='Inscription.php'>Inscription</a>";
 	                echo "</li>";
 
 	                echo " <li class='nav-item'>";
 	                    echo "<a class='nav-link active' href='connect_user.php'>Connexion</a>";
 	                echo "</li>";
-	            } else {
-	                echo " <li class='nav-item'>";
-	                    echo "<a class='nav-link active' href='disconnect.php'>Déconnexion</a>";
-	                echo "</li>";
+
 	            }
 
 	         ?>
@@ -85,18 +82,9 @@
 	  </div>
 	</nav>
 	<!--------------------- Fin de la barre de navigation --------------------->
-
-
-
-	<h1 align="center">Abonnements</h1>
-	<ul>
-	    <li><a href="Abonnement.php"/>Tous les abonnements</li>
-	    <li><a href="Tpublic.php"/>Tout Public</li>
-	    <li><a href="Social.php"/>Tarification Sociale</li>
-	    <li><a href="basique.php"/>4-25 ANS</li>
-	    <li><a href="Mature.php"/>65 ANS et +</li>
-	    <li><a href="ticket.php"/>Titres Occasionnels</li>
-	</ul>
-
-</body>
-</html>
+ 	<div class='container'>
+ 		<h1 class="my-4 text-center">Vous avez été déconnecté</h1>
+ 		<a href="index.php">Retour à l'accueil</a>
+ 	</div>
+ </body>
+ </html>

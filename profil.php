@@ -110,7 +110,7 @@
 
 		<p>Nom: <?php echo $user['nom']; ?></p>
 		<p>Prénom: <?php echo $user['prenom']; ?></p>
-		<p>Date de naissance: <?php echo $user['dn']." (".age($user['dn'])." ans)"; ?></p>
+		<p>Date de naissance: <?php echo date('d/m/Y',strtotime($user['dn']))." (".age($user['dn'])." ans)"; ?></p>
 		<p>Adresse: <?php echo $user['adresse']; ?></p>
 		<p>Email: <?php echo $user['email']; ?></p>
 
@@ -126,7 +126,28 @@
      			$resultat = pg_query($sql3);
      			$abo = pg_fetch_array($resultat);
 
-				echo "<p>Abonnement : ".$abo["libt"]."</p>";
+     			if (isset($abo['libt'])) {
+     				$echeance = date('d/m/Y', strtotime($user['datedebutabo']. ' + '.$abo['dureevalidjour'].' days'));
+     				echo "<p>Abonnement : ".$abo["libt"]."</p>";
+     				echo "<p>Date d'échéance: $echeance</p>";
+    			} else {
+     				echo "<p>Abonnement : Pas d'abonnement en cours</p>";
+     			}
+				echo "<h3>Contenu de la carte :</h3>";
+
+				//Récupération des information du solde de la carte
+	     			$sql4 = "SELECT soldecarte.*, libt FROM soldecarte natural join titretransport WHERE numc = ".$_SESSION['carte'].";";
+	     			$resultat = pg_query($sql4);
+	     			$solde = pg_fetch_array($resultat);
+
+	     			echo "<ul>";
+	     			while ($solde) {
+	     				echo "<li>".$solde['libt']." - ".$solde['quantite']."</li>";
+	     				$solde = pg_fetch_array($resultat);
+	     			}
+	     			echo "</ul><br>";
+
+				echo "<a href='index.php' class='btn btn-info'>Historique des validations</a>";		
 			}
 		?>
 

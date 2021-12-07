@@ -44,7 +44,7 @@
 	            <li><a class="dropdown-item" href="#">Carte</a></li>
 	            <li><hr class="dropdown-divider"></li>
 	            <li><a class="dropdown-item" href="#">Abonnement</a></li>
-	            <li><a class="dropdown-item" href="#">Ticket unitaire</a></li>
+	            <li><a class="dropdown-item" href="achat_ticket.php">Ticket unitaire</a></li>
 	          </ul>
 	        </li>
 

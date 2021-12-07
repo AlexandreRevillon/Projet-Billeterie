@@ -41,7 +41,7 @@
 	            Achat
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	            <li><a class="dropdown-item" href="achat_ticket.php">Carte</a></li>
+	            <li><a class="dropdown-item" href="achat_carte.php">Carte</a></li>
 	            <li><hr class="dropdown-divider"></li>
 	            <li><a class="dropdown-item" href="achat_abonnement.php">Abonnement</a></li>
 	            <li><a class="dropdown-item" href="achat_ticket.php">Ticket unitaire</a></li>
@@ -92,10 +92,14 @@
 	</nav>
 	<!--------------------- Fin de la barre de navigation --------------------->
 
+	<h1 align="center my-4">Achat - Carte</h1>
 
 
-	<h1 align="center">Achat - Carte</h1>
-
+	<form action="#" method="POST">
+	<label>Type de carte</label>
+	<input type="radio"><label>Carte personnelle</label>
+	<input type="radio"><label>Carte non personnelle</label>
+	</form>
 
 </body>
 </html>

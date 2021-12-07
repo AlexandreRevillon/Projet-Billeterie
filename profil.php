@@ -31,7 +31,7 @@
 	            Achat
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	            <li><a class="dropdown-item" href="achat_ticket.php">Carte</a></li>
+	            <li><a class="dropdown-item" href="achat_carte.php">Carte</a></li>
 	            <li><hr class="dropdown-divider"></li>
 	            <li><a class="dropdown-item" href="achat_abonnement.php">Abonnement</a></li>
 	            <li><a class="dropdown-item" href="achat_ticket.php">Ticket unitaire</a></li>
@@ -115,6 +115,7 @@
 		<p>Email: <?php echo $user['email']; ?></p>
 		<p>Numéro de Carte: <?php echo(isset($_SESSION['carte'])) ? $_SESSION['carte'] : "Pas de carte" ; ?></p>
 	
+		
 
 	</div>
 

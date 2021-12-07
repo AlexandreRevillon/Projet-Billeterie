@@ -117,7 +117,7 @@
 		<h2>Informations carte :</h2>
 		<?php 
 			if (!isset($_SESSION['carte'])) {
-				echo "<p>Aucune carte associé à ce comte</p>";
+				echo "<p>Aucune carte associé à ce compte</p>";
 			} else {
 				echo "<p>Numéro de carte : ".$_SESSION['carte']."</p>";
 				

@@ -94,7 +94,7 @@
 
 
 
-	<h1 align="center">Achat - Ticket</h1>
+	<h1 align="center">Achat - Abonnement</h1>
 
 
 </body>

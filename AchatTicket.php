@@ -91,36 +91,53 @@
 	  </div>
 	</nav>
 	<!--------------------- Fin de la barre de navigation --------------------->
-
-
-
-	<h1 align="center">Station et borne de rechargement</h1>
-<?php 
-//Libelles de station
-$sql="select nums, libs from station order by nums";
-$result=pg_query($sql);
-
-    if (!$result) {
-        echo  "Probleme lors du lancement de la requete ";
-        exit;
-        }
-$ligne=pg_fetch_array($result);
-while($ligne){
-        $ligne=pg_fetch_array($result);
-}
+<?php  
+extract($_POST);
 ?>
-<form action="borneValid.php" method="POST">
-<?php
+	<h2 align="center">Achat de ticket</h2>
+<form method="POST" action="ajoutTicket.php">
+<div align="center">Entrez votre numero de carte :<input type="integer" name="numc"></div></br></br>
+<table align="center">
+    <tr>
+        <td>Nombre de tickets<td><td>Ticket<td><td><td><td>Prix unitaire<td>
+    <tr>
+    <tr>
+        <td><input type="number" name="unitaire" value="0"><td><td>Trajet Unitaire<td><td>1,70€<td>
+    <tr>
+    <tr>
+        <td><input type="number" name="zap" value="0"><td><td>Trajet Zap<td><td><td><td>1,10€<td>
+    <tr>
+    <tr>
+        <td><input type="number" name="soiree" value="0"><td><td>Pass Soirée <td><td><td><td>2,40€<td>
+    <tr>
+    <tr>
+        <td><input type="number" name="Jour" value="0"><td><td>Pass 1 jour<td><td><td><td>5,10€<td>
+    <tr>
+    <tr>
+        <td><input type="number" name="2jours" value="0"><td><td>Pass 2jours<td><td><td><td>9,30€<td>
+    <tr>
+    <tr>
+        <td><input type="number" name="3jours" value="0"><td><td>Pass 3 jours<td><td><td><td>12,5€<td>
+    <tr>
+    <tr>
+        <td><input type="number" name="4jours" value="0"><td><td>Pass 4 jours<td><td><td><td>14,40€<td>
+    <tr>
+    <tr>
+        <td><input type="number" name="5jours" value="0"><td><td>Pass 5 jours<td><td><td><td>16,10€<td>
+    <tr>
+    <tr>
+        <td><input type="number" name="6jours" value="0"><td><td>Pass 6 jours<td><td><td><td>17,10€<td>
+    <tr>
+    <tr>
+        <td><input type="number" name="7jours" value="0"><td><td>Pass 7 jours<td><td><td><td>17,70€<td>
+    <tr>
 
-//Liste deroulante des stations
-$libs=pg_fetch_all($result);
-
-?>
-<h5>Stations :</h5><select name='nums'><?php foreach ($libs as $s){
-    echo "<option value='".$s['nums']."'>".$s['libs']."</option></br>";
-}  
-?>
-<input type="submit" value="Valider">
+    <tr>
+        <td><input type="submit" value="Valider"><td><td><td>
+        <td><input type="reset" value="Réinitialiser"><td>
+    <tr>
+</table>
+<input type="hidden" name="nums" value='$nums'>
+<input type="hidden" name="codebr" value='$codebr'>
 </form>
-</body>
 </html>

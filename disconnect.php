@@ -6,7 +6,6 @@
 	$_SESSION['user']='NA';
 	unset($_SESSION['nom']);
 	unset($_SESSION['prenom']);
-	unset($_SESSION['carte']);
  ?>
 
  <!DOCTYPE html>
@@ -38,9 +37,9 @@
 	            Achat
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	            <li><a class="dropdown-item" href="achat_carte.php">Carte</a></li>
+	            <li><a class="dropdown-item" href="#">Carte</a></li>
 	            <li><hr class="dropdown-divider"></li>
-	            <li><a class="dropdown-item" href="achat_abonnement.php">Abonnement</a></li>
+	            <li><a class="dropdown-item" href="#">Abonnement</a></li>
 	            <li><a class="dropdown-item" href="achat_ticket.php">Ticket unitaire</a></li>
 	          </ul>
 	        </li>

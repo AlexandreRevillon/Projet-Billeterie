@@ -31,9 +31,9 @@
 	            Achat
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	            <li><a class="dropdown-item" href="achat_carte.php">Carte</a></li>
+	            <li><a class="dropdown-item" href="#">Carte</a></li>
 	            <li><hr class="dropdown-divider"></li>
-	            <li><a class="dropdown-item" href="achat_abonnement.php">Abonnement</a></li>
+	            <li><a class="dropdown-item" href="#">Abonnement</a></li>
 	            <li><a class="dropdown-item" href="achat_ticket.php">Ticket unitaire</a></li>
 	          </ul>
 	        </li>
@@ -113,27 +113,25 @@
 	    			$ligne=pg_fetch_array($resultat);
 	    			$hash = $ligne['password'];
 
-    			if (password_verify($mdp, $hash)){
-    				echo "Connexion réussie";
-    				$_SESSION['user']=$ligne['numu'];
-    				$_SESSION['nom']=$ligne['nom'];
-    				$_SESSION['prenom']=$ligne['prenom'];
-
-    				//Récupération du numéro de carte (S'il existe)
-	     			$sql2 = "SELECT * FROM carte WHERE numu = '".$ligne['numu']."';";
-	     			$resultat = pg_query($sql2);
+	    		//Récupération du numéro de carte (S'il existe)
+	     			$sql2 = "SELECT * FROM utilisateur NATURAL JOIN carte;";
+	     			$resultat = pg_query($sql);
 
 	     			if (!$resultat) {
 				        echo " Probleme lors du lancement de la requete 2";
 				        exit;
 				    }
+
 				    $carte = pg_fetch_array($resultat);
 
-   					//Ajoute de la carte en variable session si elle existe
+    			if (password_verify($mdp, $hash)){
+    				echo "Connexion réussie";
+    				$_SESSION['user']=$ligne['numu'];
+    				$_SESSION['nom']=$ligne['nom'];
+    				$_SESSION['prenom']=$ligne['prenom'];
     				if (isset($carte['numc'])) {
     					$_SESSION['carte']=$carte['numc'];
     				}
-
    					echo "<a href='index.php'>Retour à l'accueil</a>";
     			} else {
     				echo "Connexion échouée, email et/ou mot de passe incorrect";

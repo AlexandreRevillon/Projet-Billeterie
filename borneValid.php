@@ -91,36 +91,30 @@
 	  </div>
 	</nav>
 	<!--------------------- Fin de la barre de navigation --------------------->
+<h1 align="center">Station et borne de rechargement</h1>
+<?php
+extract($_POST);
+//Liste deroulante des bornes de rechargement
+//Code de bornes de rechargement
 
+$sql1="select codebr from bornerecharge where nums=$nums";
+$result1=pg_query($sql1);
 
-
-	<h1 align="center">Station et borne de rechargement</h1>
-<?php 
-//Libelles de station
-$sql="select nums, libs from station order by nums";
-$result=pg_query($sql);
-
-    if (!$result) {
+    if (!$result1) {
         echo  "Probleme lors du lancement de la requete ";
         exit;
         }
-$ligne=pg_fetch_array($result);
-while($ligne){
-        $ligne=pg_fetch_array($result);
+$ligne1=pg_fetch_array($result1);
+while($ligne1){
+        $ligne1=pg_fetch_array($result1);
 }
+$borne=pg_fetch_all($result1);
 ?>
-<form action="borneValid.php" method="POST">
-<?php
-
-//Liste deroulante des stations
-$libs=pg_fetch_all($result);
-
-?>
-<h5>Stations :</h5><select name='nums'><?php foreach ($libs as $s){
-    echo "<option value='".$s['nums']."'>".$s['libs']."</option></br>";
-}  
-?>
+<form action="AchatTicket.php" method="POST" >
+<h3>Borne de validation :</h3><select name='codebr'><?php foreach ($borne as $b){
+    echo "<option value='".$b['codebr']."'> Borne n°".$b['codebr']."</option></br>";
+}  ?>
 <input type="submit" value="Valider">
+<input type="hidden" name="nums" value='$nums'>
 </form>
-</body>
-</html>
+

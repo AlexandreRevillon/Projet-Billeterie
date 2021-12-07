@@ -39,6 +39,10 @@
 	        </li>
 
 	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
+	        </li>
+
+	        <li class="nav-item">
 	            <?php 
 	                if ($_SESSION['user'] != 'NA') {
 	                    echo "<a class='nav-link active' href='profil.php'>Profil</a>";
@@ -106,13 +110,11 @@
 
 		<p>Nom: <?php echo $user['nom']; ?></p>
 		<p>Prénom: <?php echo $user['prenom']; ?></p>
-		<p>Date de naissance: <?php echo $user['dn']; ?></p>
+		<p>Date de naissance: <?php echo $user['dn']." (".age($user['dn'])." ans)"; ?></p>
 		<p>Adresse: <?php echo $user['adresse']; ?></p>
 		<p>Email: <?php echo $user['email']; ?></p>
-		<p>Numéro de Carte: <?php echo(isset($carte['numc'])) ? $carte['numc'] : "Pas de carte" ; ?></p>
+		<p>Numéro de Carte: <?php echo(isset($_SESSION['carte'])) ? $_SESSION['carte'] : "Pas de carte" ; ?></p>
 	
-
-
 
 	</div>
 

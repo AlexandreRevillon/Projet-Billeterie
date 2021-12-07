@@ -40,6 +40,10 @@
         </li>
 
             <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
+            </li>
+            
+            <li class="nav-item">
                 <?php 
                     if ($_SESSION['user'] != 'NA') {
                         echo "<a class='nav-link active' href='profil.php'>Profil</a>";

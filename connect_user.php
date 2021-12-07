@@ -9,6 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Connexion</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 <body>
 	<!------------------------- Barre de navigation ------------------------->
@@ -37,6 +38,10 @@
 	          </ul>
 	        </li>
 
+			<li class="nav-item">
+	         	<a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
+	        </li>
+	        
 	        <li class="nav-item">
 	            <?php 
 	                if ($_SESSION['user'] != 'NA') {
@@ -96,22 +101,37 @@
 
 
 			if (isset($email) && isset($mdp)) {
-				$sql= "SELECT * FROM utilisateur WHERE email = '$email';";
-				$resultat=pg_query($sql);
+				//Récupération du mot de passe asocié à l'email rentré
+					$sql= "SELECT * FROM utilisateur WHERE email = '$email';";
+					$resultat=pg_query($sql);
 
-			    if (!$resultat) {
-			        echo " Probleme lors du lancement de la requete 1";
-			        exit;
-			    }
-    			
-    			$ligne=pg_fetch_array($resultat);
-    			$hash = $ligne['password'];
+				    if (!$resultat) {
+				        echo " Probleme lors du lancement de la requete 1";
+				        exit;
+				    }
+	    			
+	    			$ligne=pg_fetch_array($resultat);
+	    			$hash = $ligne['password'];
+
+	    		//Récupération du numéro de carte (S'il existe)
+	     			$sql2 = "SELECT * FROM utilisateur NATURAL JOIN carte;";
+	     			$resultat = pg_query($sql);
+
+	     			if (!$resultat) {
+				        echo " Probleme lors du lancement de la requete 2";
+				        exit;
+				    }
+
+				    $carte = pg_fetch_array($resultat);
 
     			if (password_verify($mdp, $hash)){
     				echo "Connexion réussie";
     				$_SESSION['user']=$ligne['numu'];
     				$_SESSION['nom']=$ligne['nom'];
     				$_SESSION['prenom']=$ligne['prenom'];
+    				if (isset($carte['numc'])) {
+    					$_SESSION['carte']=$carte['numc'];
+    				}
    					echo "<a href='index.php'>Retour à l'accueil</a>";
     			} else {
     				echo "Connexion échouée, email et/ou mot de passe incorrect";

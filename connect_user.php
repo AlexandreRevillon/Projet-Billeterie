@@ -113,25 +113,27 @@
 	    			$ligne=pg_fetch_array($resultat);
 	    			$hash = $ligne['password'];
 
-	    		//Récupération du numéro de carte (S'il existe)
-	     			$sql2 = "SELECT * FROM utilisateur NATURAL JOIN carte;";
-	     			$resultat = pg_query($sql);
-
-	     			if (!$resultat) {
-				        echo " Probleme lors du lancement de la requete 2";
-				        exit;
-				    }
-
-				    $carte = pg_fetch_array($resultat);
-
     			if (password_verify($mdp, $hash)){
     				echo "Connexion réussie";
     				$_SESSION['user']=$ligne['numu'];
     				$_SESSION['nom']=$ligne['nom'];
     				$_SESSION['prenom']=$ligne['prenom'];
+
+    				//Récupération du numéro de carte (S'il existe)
+	     			$sql2 = "SELECT * FROM carte WHERE numu = '".$ligne['numu']."';";
+	     			$resultat = pg_query($sql2);
+
+	     			if (!$resultat) {
+				        echo " Probleme lors du lancement de la requete 2";
+				        exit;
+				    }
+				    $carte = pg_fetch_array($resultat);
+
+   					//Ajoute de la carte en variable session si elle existe
     				if (isset($carte['numc'])) {
     					$_SESSION['carte']=$carte['numc'];
     				}
+
    					echo "<a href='index.php'>Retour à l'accueil</a>";
     			} else {
     				echo "Connexion échouée, email et/ou mot de passe incorrect";

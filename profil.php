@@ -113,9 +113,22 @@
 		<p>Date de naissance: <?php echo $user['dn']." (".age($user['dn'])." ans)"; ?></p>
 		<p>Adresse: <?php echo $user['adresse']; ?></p>
 		<p>Email: <?php echo $user['email']; ?></p>
-		<p>Numéro de Carte: <?php echo(isset($_SESSION['carte'])) ? $_SESSION['carte'] : "Pas de carte" ; ?></p>
-	
-		
+
+		<h2>Informations carte :</h2>
+		<?php 
+			if (!isset($_SESSION['carte'])) {
+				echo "<p>Aucune carte associé à ce comte</p>";
+			} else {
+				echo "<p>Numéro de carte : ".$_SESSION['carte']."</p>";
+				
+				//Récupération des informations concernant l'abonnement
+     			$sql3 = "SELECT * FROM titretransport WHERE codet ='".$user['codet']."';";
+     			$resultat = pg_query($sql3);
+     			$abo = pg_fetch_array($resultat);
+
+				echo "<p>Abonnement : ".$abo["libt"]."</p>";
+			}
+		?>
 
 	</div>
 

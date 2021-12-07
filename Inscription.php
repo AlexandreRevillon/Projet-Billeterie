@@ -135,7 +135,7 @@
         </table>
 
         </br>
-        <input align="center" type="submit" value="S'inscrire" class="btn btn-outline-success">
+        <input type="submit" value="S'inscrire" class="btn btn-outline-success">
         <a href='index.php' class="btn btn-outline-danger">Retour à l'accueil</a>
         </form>
     </div>

@@ -6,6 +6,7 @@
 	$_SESSION['user']='NA';
 	unset($_SESSION['nom']);
 	unset($_SESSION['prenom']);
+	unset($_SESSION['carte']);
  ?>
 
  <!DOCTYPE html>

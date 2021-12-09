@@ -31,9 +31,9 @@
                 Achat
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Carte</a></li>
+                <li><a class="dropdown-item" href="achat_carte.php">Carte</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Abonnement</a></li>
+                <li><a class="dropdown-item" href="achat_abonnement.php">Abonnement</a></li>
                 <li><a class="dropdown-item" href="achat_ticket.php">Ticket unitaire</a></li>
               </ul>
             </li>
@@ -135,7 +135,7 @@
         </table>
 
         </br>
-        <input align="center" type="submit" value="S'inscrire" class="btn btn-outline-success">
+        <input type="submit" value="S'inscrire" class="btn btn-outline-success">
         <a href='index.php' class="btn btn-outline-danger">Retour à l'accueil</a>
         </form>
     </div>

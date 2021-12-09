@@ -41,9 +41,9 @@
 	            Achat
 	          </a>
 	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	            <li><a class="dropdown-item" href="#">Carte</a></li>
+	            <li><a class="dropdown-item" href="achat_carte.php">Carte</a></li>
 	            <li><hr class="dropdown-divider"></li>
-	            <li><a class="dropdown-item" href="#">Abonnement</a></li>
+	            <li><a class="dropdown-item" href="achat_abonnement.php">Abonnement</a></li>
 	            <li><a class="dropdown-item" href="achat_ticket.php">Ticket unitaire</a></li>
 	          </ul>
 	        </li>
@@ -94,33 +94,8 @@
 
 
 
-	<h1 align="center">Station et borne de rechargement</h1>
-<?php 
-//Libelles de station
-$sql="select nums, libs from station order by nums";
-$result=pg_query($sql);
+	<h1 align="center">Achat - Ticket</h1>
 
-    if (!$result) {
-        echo  "Probleme lors du lancement de la requete ";
-        exit;
-        }
-$ligne=pg_fetch_array($result);
-while($ligne){
-        $ligne=pg_fetch_array($result);
-}
-?>
-<form action="borneValid.php" method="POST">
-<?php
 
-//Liste deroulante des stations
-$libs=pg_fetch_all($result);
-
-?>
-<h5>Stations :</h5><select name='nums'><?php foreach ($libs as $s){
-    echo "<option value='".$s['nums']."'>".$s['libs']."</option></br>";
-}  
-?>
-<input type="submit" value="Valider">
-</form>
 </body>
 </html>

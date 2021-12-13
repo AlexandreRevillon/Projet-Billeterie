@@ -229,8 +229,6 @@
 						$ligne4=pg_fetch_array($result4);
 						if ($ligne4['numc']==$numc) {
 							//La carte existe: ajout des titres de transport sur la Carte
-							echo "<h2>La carte existe</h2>";
-
 							//Recherche des titres existants dans la base
 								$sql="SELECT * from titretransport where codep is null;";
 								$result=pg_query($sql);
@@ -296,11 +294,14 @@
 								$ligne=pg_fetch_array($result);
 							}
 
-							echo "<p>Ajout réussi</p>";
+							echo "<h2>Paiement réussi</h2>";
+							echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
 
 						} else {
 							//La carte n'existe pas, retour au formulaire avec données pré-remplies
-							echo "<h2>La carte '$numc' n'existe pas</h2>";
+							echo "<h2>La carte '$numc' n'existe pas, le paiement n'a pas abouti</h2>";
+							echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+							echo "<a href='achat_ticket.php' class='btn btn-outline-primary'>Retour au formulaire</a>";
 						}
 			} else {
 				//Simulation de paiement en cours

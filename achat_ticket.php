@@ -22,7 +22,7 @@
 	 }
 	?>
 
-	<!------------------------- Barre de navigation ------------------------->
+	!------------------------- Barre de navigation ------------------------->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	  <div class="container-fluid">
 	    <a class="navbar-brand" href="index.php">Ilévia</a>
@@ -48,39 +48,39 @@
 	          </ul>
 	        </li>
 
-			<li class="nav-item">
-	         	<a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
-	        </li>
+	            <li class="nav-item">
+	                <a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
+	            </li>
 
+	            <li class="nav-item">
+	                <?php
+	                    if ($_SESSION['user'] != 'NA') {
+	                        echo "<a class='nav-link active' href='profil.php'>Profil</a>";
+	                    } else {
+	                        echo "<a class='nav-link disabled' href='#' tabindex='-1' aria-disabled='true'>Profil</a>";
+	                    }
 
-	        <li class="nav-item">
+	                 ?>
+
+	            </li>
+
 	            <?php
 	                if ($_SESSION['user'] != 'NA') {
-	                    echo "<a class='nav-link active' href='profil.php'>Profil</a>";
+	                    echo " <li class='nav-item'>";
+	                        echo "<a class='nav-link active' href='disconnect.php'>Déconnexion</a>";
+	                    echo "</li>";
 	                } else {
-	                    echo "<a class='nav-link disabled' href='#' tabindex='-1' aria-disabled='true'>Profil</a>";
+	                    echo " <li class='nav-item'>";
+	                        echo "<a class='nav-link active' href='Inscription.php'>Inscription</a>";
+	                    echo "</li>";
+
+	                    echo " <li class='nav-item'>";
+	                        echo "<a class='nav-link active' href='connect_user.php'>Connexion</a>";
+	                    echo "</li>";
+
 	                }
 
 	             ?>
-
-	        </li>
-
-	        <?php
-	            if ($_SESSION['user'] == 'NA') {
-	                echo " <li class='nav-item'>";
-	                    echo "<a class='nav-link active' href='Inscription.php'>Inscription</a>";
-	                echo "</li>";
-
-	                echo " <li class='nav-item'>";
-	                    echo "<a class='nav-link active' href='connect_user.php'>Connexion</a>";
-	                echo "</li>";
-	            } else {
-	                echo " <li class='nav-item'>";
-	                    echo "<a class='nav-link active' href='disconnect.php'>Déconnexion</a>";
-	                echo "</li>";
-	            }
-
-	         ?>
 
 	      </ul>
 	      <form class="d-flex">

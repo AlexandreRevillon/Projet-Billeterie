@@ -66,7 +66,7 @@
 	        </li>
 
 	        <?php
-	            if ($_SESSION['user'] != 'NA') {
+	            if ($_SESSION['user'] == 'NA') {
 	                echo " <li class='nav-item'>";
 	                    echo "<a class='nav-link active' href='Inscription.php'>Inscription</a>";
 	                echo "</li>";

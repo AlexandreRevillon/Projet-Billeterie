@@ -314,14 +314,14 @@
 				echo "<h2>Paiement en cours</h2>";
 				echo "<img src='https://i.stack.imgur.com/ATB3o.gif'>";
 				echo "<script type='text/javascript'>
-							    function formSubmit(){
-							          document.getElementById('TheForm').submit();
-							    }
+					    function formSubmit(){
+					          document.getElementById('TheForm').submit();
+					    }
 
-							    window.onload=function(){
-							          window.setTimeout(formSubmit, 3000);
-							    };
-							</script>";
+					    window.onload=function(){
+					          window.setTimeout(formSubmit, 3000);
+					    };
+					  </script>";
 			}
 	?>
 

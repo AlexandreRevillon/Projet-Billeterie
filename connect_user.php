@@ -118,6 +118,7 @@
     				$_SESSION['user']=$ligne['numu'];
     				$_SESSION['nom']=$ligne['nom'];
     				$_SESSION['prenom']=$ligne['prenom'];
+    				$_SESSION['profil']=$ligne['codep'];
 
     				//Récupération du numéro de carte (S'il existe)
 	     			$sql2 = "SELECT * FROM carte WHERE numu = '".$ligne['numu']."';";

@@ -7,6 +7,7 @@
 	unset($_SESSION['nom']);
 	unset($_SESSION['prenom']);
 	unset($_SESSION['carte']);
+	unset($_SESSION['profil']);
  ?>
 
  <!DOCTYPE html>

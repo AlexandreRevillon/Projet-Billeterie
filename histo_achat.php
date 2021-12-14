@@ -10,6 +10,9 @@
 	<title>Document</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <style>
+        td, th {border: 1px solid black}
+    </style>
 </head>
 <body>
 	<!------------------------- Barre de navigation ------------------------->
@@ -82,10 +85,45 @@
 	</nav>
 	<!--------------------- Fin de la barre de navigation --------------------->
 	
-	<div class="container">
-		<h1 class="text-center my-4">Historique des achats</h1>
+<div class="container">
+<h1 class="text-center my-4">Historique des achats</h1>
+</div>
 
-	</div>
+<?php
+//Connexion à la base de données
+    include "connexion.php";
+    $con=connect();
+    if (!$con) {
+        echo "Probleme de connexion à la base";
+        exit;
+    }
+
+extract($_POST);
+
+$sql="select t.libt,s.libs,r.codebr,r.dateheurerecharge,r.quantite from recharge r natural join titretransport t natural join bornerecharge b natural join station s where numc='".$_SESSION['carte']."'";
+$result=pg_query($sql);
+
+//Vérification de l'execution de la requete
+if (!$result) {
+    echo  "Probleme lors du lancement de la requete ";
+    exit;
+}
+
+//lecture des resultats et affichage sous forme de tableau
+$ligne=pg_fetch_array($result);
+
+?>
+<table align='center' border=2>
+    <tr>
+        <td>Titre de transport</td><td>Station</td><td>Borne achat</td><td>Date et heure - Recharge</td><td>Quantité</td> 
+    </tr>
+    <?php while($ligne){
+        echo '<tr><td>'.$ligne['libt'].'</td><td>'.$ligne['libs'].'</td><td>'.$ligne['codebr'].'</td><td>'.$ligne['dateheurerecharge'].'</td><td>'.$ligne['quantite'].'</td> 
+        </tr>';
+        $ligne=pg_fetch_array($result);
+    }
+    ?>
+</table>
 
 </body>
 </html>

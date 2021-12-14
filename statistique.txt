@@ -1,0 +1,4 @@
+1)//nombre de rechargement dans une station : select s.libs, count(r.numc) as nb_recharges from from recharge r natural join titretransport t natural join bornerecharge b natural join station s group by libs;
+2) //nombre moyen de rechargement dans chaque station : select s.libs, count(r.numc) as nb_recharges from from recharge r natural join titretransport t natural join bornerecharge b natural join station s group by libs;
+
+3)// nombre de trajets moyens par abonnes : select numu, avg(select count(r.numc) from recharge r natural join carte c natural join utilisateur u group by u.numu) from utilisateur; (a voir)

@@ -83,77 +83,9 @@
 	<!--------------------- Fin de la barre de navigation --------------------->
 	
 	<div class="container">
-		<h1 class="text-center my-4">Profil</h1>
-
-		<h2>Informations personnelles:</h2>
-		<?php 
-			include 'Fonctions.php';
-			//Connexion à la base de données
-    			include "connexion.php";
-    			$con=connect();
-    			if (!$con) {
-        			echo "Probleme de connexion à la base";
-        			exit;
-     			}
-
-     		//Récupération des informations de l'utilisateur
-     			$sql = "SELECT * FROM utilisateur WHERE numu ='".$_SESSION['user']."';";
-     			$resultat = pg_query($sql);
-     			$user = pg_fetch_array($resultat);
-
-
-     		//Récupération des information de la carte associée
-     			$sql2 = "SELECT * FROM utilisateur NATURAL JOIN carte;";
-     			$resultat = pg_query($sql);
-     			$carte = pg_fetch_array($resultat);
-		 ?>
-
-		<p>Nom: <?php echo $user['nom']; ?></p>
-		<p>Prénom: <?php echo $user['prenom']; ?></p>
-		<p>Date de naissance: <?php echo date('d/m/Y',strtotime($user['dn']))." (".age($user['dn'])." ans)"; ?></p>
-		<p>Adresse: <?php echo $user['adresse']; ?></p>
-		<p>Email: <?php echo $user['email']; ?></p>
-
-		<h2>Informations carte :</h2>
-		<?php 
-			if (!isset($_SESSION['carte'])) {
-				echo "<p>Aucune carte associé à ce compte</p>";
-			} else {
-				echo "<p>Numéro de carte : ".$_SESSION['carte']."</p>";
-				
-				//Récupération des informations concernant l'abonnement
-     			$sql3 = "SELECT * FROM titretransport WHERE codet ='".$user['codet']."';";
-     			$resultat = pg_query($sql3);
-     			$abo = pg_fetch_array($resultat);
-
-     			if (isset($abo['libt'])) {
-     				$echeance = date('d/m/Y', strtotime($user['datedebutabo']. ' + '.$abo['dureevalidjour'].' days'));
-     				echo "<p>Abonnement : ".$abo["libt"]."</p>";
-     				echo "<p>Date d'échéance: $echeance</p>";
-    			} else {
-     				echo "<p>Abonnement : Pas d'abonnement en cours</p>";
-     			}
-				echo "<h3>Contenu de la carte :</h3>";
-
-				//Récupération des information du solde de la carte
-	     			$sql4 = "SELECT soldecarte.*, libt FROM soldecarte natural join titretransport WHERE numc = ".$_SESSION['carte'].";";
-	     			$resultat = pg_query($sql4);
-	     			$solde = pg_fetch_array($resultat);
-
-	     			echo "<ul>";
-	     			while ($solde) {
-	     				echo "<li>".$solde['libt']." - ".$solde['quantite']."</li>";
-	     				$solde = pg_fetch_array($resultat);
-	     			}
-	     			echo "</ul><br>";
-
-				echo "<a href='histo_valid.php' class='btn btn-info'>Historique des validations</a>";		
-				echo "<a href='histo_achat.php' class='btn btn-info'>Historique des achats</a>";
-			}
-		?>
+		<h1 class="text-center my-4">Historique des achats</h1>
 
 	</div>
-	
 
 </body>
 </html>

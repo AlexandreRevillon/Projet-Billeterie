@@ -281,7 +281,7 @@
 										$i++;
 
 									//Ajout dans l'historique des achats
-										$sql3 = "INSERT INTO recharge VALUES ($numc, '".$ligne['codet']."', $borne, '".date('Y-m-d')."', ".$_POST[$ligne['codet']].")";
+										$sql3 = "INSERT INTO recharge VALUES ($numc, '".$ligne['codet']."', $borne, '".date('Y-m-d h:i:s')."', ".$_POST[$ligne['codet']].")";
 										$result3=pg_query($sql3);
 									//Vérification du lancement de la requête
 											if (!$result3) {

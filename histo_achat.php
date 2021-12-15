@@ -1,5 +1,5 @@
-<?php 
-    include "session.php"; 
+<?php
+    include "session.php";
  ?>
 
 <!DOCTYPE html>
@@ -43,7 +43,7 @@
 	        </li>
 
 	        <li class="nav-item">
-	            <?php 
+	            <?php
 	                if ($_SESSION['user'] != 'NA') {
 	                    echo "<a class='nav-link active' href='profil.php'>Profil</a>";
 	                } else {
@@ -51,10 +51,10 @@
 	                }
 
 	             ?>
-	                            
+
 	        </li>
 
-	        <?php 
+	        <?php
 	            if ($_SESSION['user'] != 'NA') {
 	            	echo " <li class='nav-item'>";
 	                    echo "<a class='nav-link active' href='disconnect.php'>Déconnexion</a>";
@@ -81,9 +81,54 @@
 	  </div>
 	</nav>
 	<!--------------------- Fin de la barre de navigation --------------------->
-	
+
 	<div class="container">
 		<h1 class="text-center my-4">Historique des achats</h1>
+
+    <?php
+      //Connexion à la base de données
+          include "connexion.php";
+          $con=connect();
+          if (!$con) {
+              echo "Probleme de connexion à la base";
+              exit;
+          }
+
+      extract($_POST);
+
+      $sql="select t.libt,s.libs,r.codebr,r.dateheurerecharge,r.quantite from recharge r natural join titretransport t natural join bornerecharge b natural join station s where numc='".$_SESSION['carte']."'";
+      $result=pg_query($sql);
+
+      //Vérification de l'execution de la requete
+      if (!$result) {
+          echo  "Probleme lors du lancement de la requete ";
+          exit;
+      }
+
+      //lecture des resultats et affichage sous forme de tableau
+      $ligne=pg_fetch_array($result);
+
+      ?>
+
+      <table class="table table-striped table-hover text-center">
+        <thead>
+          <tr>
+              <th>Titre de transport</th>
+              <th>Station</th>
+              <th>Borne achat</th>
+              <th>Date et heure - Recharge</th>
+              <th>Quantité</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php while($ligne){
+              echo '<tr><td>'.$ligne['libt'].'</td><td>'.$ligne['libs'].'</td><td>'.$ligne['codebr'].'</td><td>'.$ligne['dateheurerecharge'].'</td><td>'.$ligne['quantite'].'</td>
+              </tr>';
+              $ligne=pg_fetch_array($result);
+          }
+          ?>
+        </tbody>
+      </table>
 
 	</div>
 

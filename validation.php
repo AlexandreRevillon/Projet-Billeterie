@@ -186,7 +186,61 @@
 				echo "</form>";
 
 			} else {
+				//Récupération du solde de la carte
+					//Requete de selection destitres de transport sur la carte
+						$sql="SELECT * from soldecarte natural join titretransport where numc = $numc;";
+						$result=pg_query($sql);
+
+					//Vérification du lancement de la requête
+						if (!$result) {
+							echo  "Probleme lors du lancement de la requete 3";
+							exit;
+						}
+
+					//Récupération du solde de la carte
+						$solde=pg_fetch_all($result, PGSQL_ASSOC);
+
+				//Vérification de la présence d'un abonnement si la carte est une carte personnelle
+					//Vérification du type de carte
+						$sql = "SELECT * FROM carte where numc = $numc";
+						$result=pg_query($sql);
+
+					//Vérification du lancement de la requête
+						if (!$result) {
+							echo  "Probleme lors du lancement de la requete 4";
+							exit;
+						}
+
+					//Récupération du type de la carte
+						$ligne=pg_fetch_array($result);
+
+					if ($ligne['codetype'] == 'CP') {
+						//Vérification du type de carte
+							$sql = "SELECT * FROM utilisateur natural join carte where numc = $numc";
+							$result=pg_query($sql);
+
+						//Vérification du lancement de la requête
+							if (!$result) {
+								echo  "Probleme lors du lancement de la requete 4";
+								exit;
+							}
+
+						//Récupération du type de la carte
+							$ligne=pg_fetch_array($result);
+							if (isset($ligne['codet'])) {
+								echo "Utilisation de l'abonnement";
+								exit;
+							}
+					} 
 					
+
+				//Vérification de la présence d'un Pass en cours de validité
+					foreach ($solde as $key => $titre) {
+						if ($titre['type']=="Pass") {
+							echo "Utilisation du Pass (vérifier si les date concorde)";
+						}
+					}
+
 			} 
 		?>
 	</div>

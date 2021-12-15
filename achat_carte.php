@@ -132,7 +132,7 @@
 							echo "<p>Numéro de carte: $numc</p>";
 
 							//Création du numéro de carte dans la BD + liaison avec l'utilisateur
-							$sql = "INSERT INTO carte VALUES ($numc, '".$_SESSION['user']."', 'CNP')";
+							$sql = "INSERT INTO carte VALUES ($numc, '".$_SESSION['user']."', 'CP')";
 							$result = pg_query($sql);
 							if (!$result) {
 						        echo " Probleme lors du lancement de la requete 2";

@@ -101,7 +101,9 @@
 			if ($_SESSION['user']=="NA") {
 				//utilisateur pas connecté
 					echo "<h2 class='text-center'>Veuillez vous connecter ou vous inscrire d'abord</h2>";
-
+			} else if (!isset($_SESSION['carte'])) {
+				//utilisateur n'a pas de carte
+					echo "<h2 class='text-center'>Vuos devez posséder une carte nominative pour pouvoir prendre un abonnement</h2>";
 			}else {
 				//Vérification abonnement en cours
 					$sql = "SELECT * FROM utilisateur WHERE numu = '".$_SESSION['user']."';";

@@ -1,5 +1,5 @@
-<?php 
-    include "session.php"; 
+<?php
+    include "session.php";
  ?>
 
 <!DOCTYPE html>
@@ -42,9 +42,9 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
             </li>
-            
+
             <li class="nav-item">
-                <?php 
+                <?php
                     if ($_SESSION['user'] != 'NA') {
                         echo "<a class='nav-link active' href='profil.php'>Profil</a>";
                     } else {
@@ -52,10 +52,10 @@
                     }
 
                  ?>
-                                
+
             </li>
 
-            <?php 
+            <?php
                 if ($_SESSION['user'] != 'NA') {
                     echo " <li class='nav-item'>";
                         echo "<a class='nav-link active' href='disconnect.php'>Déconnexion</a>";
@@ -84,6 +84,47 @@
 <!--------------------- Fin de la barre de navigation --------------------->
 
 <h1 class="text-center my-4">Page d'accueil</h1>
-    
+
+<div class="container">
+
+
+  <!-------------------- Début du caroussel -------------------------->
+    <div id="carouselExampleDark" class="carousel carousel-dark slide offset-3 col-6" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="5000">
+          <img src="pictures/logo.jpg" class="d-block w-100 col-6" alt="...">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Ilévia</h5>
+            <p>Les transports de la MEL</p>
+          </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="5000">
+          <img src="pictures/vlille.jpg" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-none d-md-block text-white">
+            <h5>V'Lille</h5>
+            <p>Une nouvelle fçons de se déplacer sur la MEL</p>
+          </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="5000">
+          <img src="pictures/greve.png" class="d-block w-100" alt="...">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  <!-------------------- Fin du caroussel -------------------------->
+
+</div>
 </body>
 </html>

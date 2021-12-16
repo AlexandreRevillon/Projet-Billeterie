@@ -97,21 +97,19 @@
       </div>
       <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="5000">
-          <img src="pictures/logo.jpg" class="d-block w-100 col-6" alt="...">
+          <img src="logo.jpg" class="d-block w-100 col-6" alt="...">
           <div class="carousel-caption d-none d-md-block">
-            <h5>Ilévia</h5>
-            <p>Les transports de la MEL</p>
           </div>
         </div>
         <div class="carousel-item" data-bs-interval="5000">
-          <img src="pictures/vlille.jpg" class="d-block w-100" alt="...">
+          <img src="vlille.jpg" class="d-block w-100" alt="...">
           <div class="carousel-caption d-none d-md-block text-white">
             <h5>V'Lille</h5>
-            <p>Une nouvelle fçons de se déplacer sur la MEL</p>
+            <p>Une nouvelle façons de se déplacer sur la MEL</p>
           </div>
         </div>
         <div class="carousel-item" data-bs-interval="5000">
-          <img src="pictures/greve.png" class="d-block w-100" alt="...">
+          <img src="greve.png" class="d-block w-100" alt="...">
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
@@ -124,6 +122,26 @@
       </button>
     </div>
   <!-------------------- Fin du caroussel -------------------------->
+
+  <div class="row mt-4">
+    <div class="card col-5">
+      <img src="..." class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+
+    <div class="card col-5 offset-2">
+      <img src="..." class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+  </div>
 
 </div>
 </body>

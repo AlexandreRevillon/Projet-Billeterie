@@ -83,7 +83,7 @@
 	<!--------------------- Fin de la barre de navigation --------------------->
 	
 	<div class="container">
-		<h1 class="text-center my-4">Historique des achats</h1>
+		<h1 class="text-center my-4">Historique des validations</h1>
 
     <?php
       //Connexion à la base de données

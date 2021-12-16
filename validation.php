@@ -14,6 +14,7 @@
 <body>
 		
 	<?php
+	include "Fonctions.php";
 	include "connexion.php";
 	$con=connect();
 	if (!$con) {
@@ -98,7 +99,7 @@
 		<?php
 			extract($_POST);
 
-			if (!isset($validation)) {
+			if (!isset($validborne) && !isset($validtitre)) {
 				// Validation pas faite: formulaire d'achat
 
 				//Blocage de la validation du formulaire si tout le formulaire n'est pas apparu en entier
@@ -180,12 +181,12 @@
 				 	echo "<br>";
 
 					//Affichage des bouton en bas du formulaire
-					 	echo "<input type='submit' class='btn btn-outline-success' name='validation' value='Valider' $disabled>";
+					 	echo "<input type='submit' class='btn btn-outline-success' name='validborne' value='Valider' $disabled>";
 					 	echo "<a href='index.php' class='btn btn-outline-danger'>Annuler</a>";
 
 				echo "</form>";
 
-			} else {
+			} else if (!isset($validtitre)){
 				//Récupération du solde de la carte
 					//Requete de selection destitres de transport sur la carte
 						$sql="SELECT * from soldecarte natural join titretransport where numc = $numc;";
@@ -225,23 +226,105 @@
 								exit;
 							}
 
+
 						//Récupération du type de la carte
 							$ligne=pg_fetch_array($result);
 							if (isset($ligne['codet'])) {
-								echo "Utilisation de l'abonnement";
+								//Ajout dans la table validation
+									//Requete d'ajout dans la base
+										$sql = "INSERT INTO validation VALUES ($numc, '".$ligne['codet']."', $borne, '".date('Y-m-d H:i:s')."', 1) ";
+										$result=pg_query($sql);
+
+									//Vérification du lancement de la requête
+										if (!$result) {
+											echo  "Probleme lors du lancement de la requete 4";
+											exit;
+										}
+
+								//Récupération du libellé de l'abonnement utilisé
+									//Recherche dans la base
+										$sql = "SELECT libt From titretransport where codet = '".$ligne['codet']."';";
+										$result=pg_query($sql);
+
+									//Vérification du lancement de la requête
+										if (!$result) {
+											echo  "Probleme lors du lancement de la requete 4";
+											exit;
+										}
+
+									//Récupération du libellé
+										$ligne=pg_fetch_array($result);
+										echo "<h2>Carte validée, abonnement utilisé: ".$ligne['libt']."</h2>";
+										echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
 								exit;
 							}
 					} 
 					
 
+
 				//Vérification de la présence d'un Pass en cours de validité
 					foreach ($solde as $key => $titre) {
 						if ($titre['type']=="Pass") {
-							echo "Utilisation du Pass (vérifier si les date concorde)";
+							//Recherche dans la base
+								$sql = "SELECT * From titretransport where codet = '".$titre['codet']."';";
+								$result=pg_query($sql);
+
+							//Vérification du lancement de la requête
+								if (!$result) {
+									echo  "Probleme lors du lancement de la requete 4";
+									exit;
+								}
+
+							//Récupération du libellé
+								$ligne=pg_fetch_array($result);
+
+
+							//Vérification date de validité
+								if ( date('Y-m-d')<$titre['datedebut'] && $titre['datedebut']<date('Y-m-d',strtotime($titre['datedebut'].' + '.$ligne['dureevalidjour'].' days'))) {
+									//Ajout dans la table validation 
+										$sql = "INSERT INTO validation VALUES ($numc, '".$titre['codet']."', $borne, '".date('Y-m-d H:i:s')."', 1)";
+										$result=pg_query($sql);
+
+									//Vérification du lancement de la requête
+										if (!$result) {
+											echo  "Probleme lors du lancement de la requete 4";
+											exit;
+										}
+									echo "<h2>Carté validée, pass utilisée : ".$ligne['libt']." </h2>";
+									echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+									exit;
+								 } 
+
 						}
 					}
 
-			} 
+
+				//Supression des Pass dans le tablaeu des titres de transports
+					$solde = removeElementWithValue($solde, 'type', 'Pass');
+
+
+				//Vérification de la présence de titres sur la carte
+					if ($solde == "" || count($solde) == 0) {
+						echo "<h2>Il n'y a aucun titre de transport à valider sur cette carte</h2>";
+						echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+						exit;
+					}
+
+				//Choix du titre de transport à utiliser
+					echo "<form method='POST' action='validation.php'>";
+					foreach ($solde as $key => $titre) {
+						if ($titre['type']!="Pass") {
+							echo "<input type='radio' name='titrevalid' id='".$titre['codet']."' value='".$titre['codet']."'><label for='".$titre['codet']."'>".$titre['libt']."</label>";
+							echo "<br>";
+						}
+					}
+		    		echo "<input align='center' type='submit' value='Valider' name='validtitre' class='btn btn-outline-success'>";
+		    		echo "<a href='index.php' class='btn btn-outline-danger'>Retour à l'accueil</a>";
+					echo "</form>";
+
+			} else {
+				echo "Carte validé avec le titre $titrevalid";
+			}
 		?>
 	</div>
 

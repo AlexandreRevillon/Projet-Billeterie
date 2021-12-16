@@ -127,7 +127,7 @@
      			$abo = pg_fetch_array($resultat);
 
      			if (isset($abo['libt'])) {
-     				$echeance = date('d/m/Y', strtotime($user['datedebutabo']. ' + '.$abo['dureevalidjour'].' days'));
+     				$echeance = date('d/m/Y', strtotime($user['datedebutabo'].' + '.$abo['dureevalidjour'].' days'));
      				echo "<p>Abonnement : ".$abo["libt"]."</p>";
      				echo "<p>Date d'échéance: $echeance</p>";
     			} else {

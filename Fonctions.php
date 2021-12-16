@@ -21,4 +21,15 @@ function codep($date){
         }
     }
 }
+
+function removeElementWithValue($array, $key, $value){
+     foreach($array as $subKey => $subArray){
+          if($subArray[$key] == $value){
+               unset($array[$subKey]);
+          }
+     }
+     return $array;
+}
+
+
 ?>

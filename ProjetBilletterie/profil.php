@@ -1,0 +1,159 @@
+<?php 
+    include "session.php"; 
+ ?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+	<!------------------------- Barre de navigation ------------------------->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" href="index.php">Ilévia</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" href="index.php">Accueil</a>
+	        </li>
+
+	        <li class="nav-item dropdown">
+	          <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	            Achat
+	          </a>
+	          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+	            <li><a class="dropdown-item" href="achat_carte.php">Carte</a></li>
+	            <li><hr class="dropdown-divider"></li>
+	            <li><a class="dropdown-item" href="achat_abonnement.php">Abonnement</a></li>
+	            <li><a class="dropdown-item" href="achat_ticket.php">Ticket unitaire</a></li>
+	          </ul>
+	        </li>
+
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
+	        </li>
+
+	        <li class="nav-item">
+	            <?php 
+	                if ($_SESSION['user'] != 'NA') {
+	                    echo "<a class='nav-link active' href='profil.php'>Profil</a>";
+	                } else {
+	                    echo "<a class='nav-link disabled' href='#' tabindex='-1' aria-disabled='true'>Profil</a>";
+	                }
+
+	             ?>
+	                            
+	        </li>
+
+	        <?php 
+	            if ($_SESSION['user'] != 'NA') {
+	            	echo " <li class='nav-item'>";
+	                    echo "<a class='nav-link active' href='disconnect.php'>Déconnexion</a>";
+	                echo "</li>";
+	            } else {
+	               	echo " <li class='nav-item'>";
+	                    echo "<a class='nav-link active' href='Inscription.php'>Inscription</a>";
+	                echo "</li>";
+
+	                echo " <li class='nav-item'>";
+	                    echo "<a class='nav-link active' href='connect_user.php'>Connexion</a>";
+	                echo "</li>";
+
+	            }
+
+	         ?>
+
+	      </ul>
+	      <form class="d-flex">
+	        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+	        <button class="btn btn-outline-success" type="submit">Search</button>
+	      </form>
+	    </div>
+	  </div>
+	</nav>
+	<!--------------------- Fin de la barre de navigation --------------------->
+	
+	<div class="container">
+		<h1 class="text-center my-4">Profil</h1>
+
+		<h2>Informations personnelles:</h2>
+		<?php 
+			include 'Fonctions.php';
+			//Connexion à la base de données
+    			include "connexion.php";
+    			$con=connect();
+    			if (!$con) {
+        			echo "Probleme de connexion à la base";
+        			exit;
+     			}
+
+     		//Récupération des informations de l'utilisateur
+     			$sql = "SELECT * FROM utilisateur WHERE numu ='".$_SESSION['user']."';";
+     			$resultat = pg_query($sql);
+     			$user = pg_fetch_array($resultat);
+
+
+     		//Récupération des information de la carte associée
+     			$sql2 = "SELECT * FROM utilisateur NATURAL JOIN carte;";
+     			$resultat = pg_query($sql);
+     			$carte = pg_fetch_array($resultat);
+		 ?>
+
+		<p>Nom: <?php echo $user['nom']; ?></p>
+		<p>Prénom: <?php echo $user['prenom']; ?></p>
+		<p>Date de naissance: <?php echo date('d/m/Y',strtotime($user['dn']))." (".age($user['dn'])." ans)"; ?></p>
+		<p>Adresse: <?php echo $user['adresse']; ?></p>
+		<p>Email: <?php echo $user['email']; ?></p>
+
+		<h2>Informations carte :</h2>
+		<?php 
+			if (!isset($_SESSION['carte'])) {
+				echo "<p>Aucune carte associé à ce compte</p>";
+			} else {
+				echo "<p>Numéro de carte : ".$_SESSION['carte']."</p>";
+				
+				//Récupération des informations concernant l'abonnement
+     			$sql3 = "SELECT * FROM titretransport WHERE codet ='".$user['codet']."';";
+     			$resultat = pg_query($sql3);
+     			$abo = pg_fetch_array($resultat);
+
+     			if (isset($abo['libt'])) {
+     				$echeance = date('d/m/Y', strtotime($user['datedebutabo']. ' + '.$abo['dureevalidjour'].' days'));
+     				echo "<p>Abonnement : ".$abo["libt"]."</p>";
+     				echo "<p>Date d'échéance: $echeance</p>";
+    			} else {
+     				echo "<p>Abonnement : Pas d'abonnement en cours</p>";
+     			}
+				echo "<h3>Contenu de la carte :</h3>";
+
+				//Récupération des information du solde de la carte
+	     			$sql4 = "SELECT soldecarte.*, libt FROM soldecarte natural join titretransport WHERE numc = ".$_SESSION['carte'].";";
+	     			$resultat = pg_query($sql4);
+	     			$solde = pg_fetch_array($resultat);
+
+	     			echo "<ul>";
+	     			while ($solde) {
+	     				echo "<li>".$solde['libt']." - ".$solde['quantite']."</li>";
+	     				$solde = pg_fetch_array($resultat);
+	     			}
+	     			echo "</ul><br>";
+
+				echo "<a href='histo_valid.php' class='btn btn-info'>Historique des validations</a>";		
+				echo "<a href='histo_achat.php' class='btn btn-info'>Historique des achats</a>";
+			}
+		?>
+
+	</div>
+	
+
+</body>
+</html>

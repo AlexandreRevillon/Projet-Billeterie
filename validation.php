@@ -260,6 +260,12 @@
 							}
 					} 
 					
+				//Vérification de la présence de titres sur la carte
+					if ($solde == "" || count($solde) == 0) {
+						echo "<h2>Il n'y a aucun titre de transport à valider sur cette carte</h2>";
+						echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+						exit;
+					}
 
 
 				//Vérification de la présence d'un Pass en cours de validité
@@ -303,7 +309,7 @@
 					$solde = removeElementWithValue($solde, 'type', 'Pass');
 
 
-				//Vérification de la présence de titres sur la carte
+				//Vérification de la présence de titres valide sur la carte
 					if ($solde == "" || count($solde) == 0) {
 						echo "<h2>Il n'y a aucun titre de transport à valider sur cette carte</h2>";
 						echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
@@ -318,12 +324,46 @@
 							echo "<br>";
 						}
 					}
+					echo "<input type='hidden' name='borne' value='$borne'>";
+					echo "<input type='hidden' name='numc' value='$numc'>";
+					echo "<input type='hidden' name='solde[]' value='$solde'>";
 		    		echo "<input align='center' type='submit' value='Valider' name='validtitre' class='btn btn-outline-success'>";
 		    		echo "<a href='index.php' class='btn btn-outline-danger'>Retour à l'accueil</a>";
 					echo "</form>";
 
 			} else {
-				echo "Carte validé avec le titre $titrevalid";
+				//Ajout dans la table validation
+					//Requete d'ajout dans la base
+						$sql = "INSERT INTO validation VALUES ($numc, '$titrevalid', $borne, '".date('Y-m-d H:i:s')."', 1) ";
+						$result=pg_query($sql);
+
+					//Vérification du lancement de la requête
+						if (!$result) {
+							echo  "Probleme lors du lancement de la requete 4";
+							exit;
+						}
+
+				//Décrémentation dans la table soldecarte
+						print_r()
+
+				//Récupération du libellé du titre
+					//Requete pour le libellé
+						$sql = "SELECT libt from titretransport where codet='$titrevalid';";
+						$result=pg_query($sql);
+
+					//Vérification du lancement de la requête
+						if (!$result) {
+							echo  "Probleme lors du lancement de la requete 4";
+							exit;
+						}
+
+					$ligne = pg_fetch_array($result);
+
+
+				echo "<h2>Carté validée, titre de transport utilisée : ".$ligne['libt']." </h2>";
+				echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+				
+
 			}
 		?>
 	</div>

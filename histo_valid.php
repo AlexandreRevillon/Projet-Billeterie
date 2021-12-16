@@ -83,7 +83,52 @@
 	<!--------------------- Fin de la barre de navigation --------------------->
 	
 	<div class="container">
-		<h1 class="text-center my-4">Historique des validations</h1>
+		<h1 class="text-center my-4">Historique des achats</h1>
+
+    <?php
+      //Connexion à la base de données
+          include "connexion.php";
+          $con=connect();
+          if (!$con) {
+              echo "Probleme de connexion à la base";
+              exit;
+          }
+
+      extract($_POST);
+
+      $sql="select t.libt,s.libs,v.codebv,v.dateheurevalid,v.quantite from validation v natural join titretransport t natural join bornevalidation b natural join station s where numc='".$_SESSION['carte']."'";
+      $result=pg_query($sql);
+
+      //Vérification de l'execution de la requete
+      if (!$result) {
+          echo  "Probleme lors du lancement de la requete ";
+          exit;
+      }
+
+      //lecture des resultats et affichage sous forme de tableau
+      $ligne=pg_fetch_array($result);
+
+      ?>
+
+      <table class="table table-striped table-hover text-center">
+        <thead>
+          <tr>
+              <th>Titre de transport</th>
+              <th>Station</th>
+              <th>Borne achat</th>
+              <th>Date et heure - Recharge</th>
+              <th>Quantité</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php while($ligne){
+              echo '<tr><td>'.$ligne['libt'].'</td><td>'.$ligne['libs'].'</td><td>'.$ligne['codebv'].'</td><td>'.$ligne['dateheurevalid'].'</td><td>'.$ligne['quantite'].'</td>
+              </tr>';
+              $ligne=pg_fetch_array($result);
+          }
+          ?>
+        </tbody>
+      </table>
 
 	</div>
 

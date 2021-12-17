@@ -296,7 +296,7 @@
 											echo  "Probleme lors du lancement de la requete 4";
 											exit;
 										}
-									echo "<h2>Carté validée, pass utilisée : ".$ligne['libt']." </h2>";
+									echo "<h2>Carte validée, pass utilisée : ".$ligne['libt']." </h2>";
 									echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
 									exit;
 								 } 
@@ -305,7 +305,7 @@
 					}
 
 
-				//Supression des Pass dans le tablaeu des titres de transports
+				//Supression des Pass dans le tableau des titres de transports
 					$solde = removeElementWithValue($solde, 'type', 'Pass');
 
 
@@ -326,15 +326,15 @@
 					}
 					echo "<input type='hidden' name='borne' value='$borne'>";
 					echo "<input type='hidden' name='numc' value='$numc'>";
-					echo "<input type='hidden' name='solde[]' value='$solde'>";
+
 		    		echo "<input align='center' type='submit' value='Valider' name='validtitre' class='btn btn-outline-success'>";
 		    		echo "<a href='index.php' class='btn btn-outline-danger'>Retour à l'accueil</a>";
 					echo "</form>";
 
 			} else {
-				//Ajout dans la table validation
+				//Vérification si possible de valider (solde > 1) pour le titre selectionné
 					//Requete d'ajout dans la base
-						$sql = "INSERT INTO validation VALUES ($numc, '$titrevalid', $borne, '".date('Y-m-d H:i:s')."', 1) ";
+						$sql = "SELECT * FROM soldecarte WHERE numc = $numc and codet = '$titrevalid'";
 						$result=pg_query($sql);
 
 					//Vérification du lancement de la requête
@@ -342,28 +342,81 @@
 							echo  "Probleme lors du lancement de la requete 4";
 							exit;
 						}
+						$ligne = pg_fetch_array($result);
 
-				//Décrémentation dans la table soldecarte
-						print_r()
 
-				//Récupération du libellé du titre
-					//Requete pour le libellé
-						$sql = "SELECT libt from titretransport where codet='$titrevalid';";
-						$result=pg_query($sql);
+						if ($ligne['quantite'] <=0)  {
+							//Suppresion du solde de ce titre de transportpour cette carte car quantité négatif qui ne devrait pas exister
+								//Requete de supression
+									$sql = "DELETE FROM soldecarte WHERE numc = $numc and codet = '$titrevalid'";
+									$result=pg_query($sql);
 
-					//Vérification du lancement de la requête
-						if (!$result) {
-							echo  "Probleme lors du lancement de la requete 4";
+								//Vérification du lancement de la requête
+									if (!$result) {
+										echo  "Probleme lors du lancement de la requete 4";
+										exit;
+									}
+
+							echo "<h2>Pas assez de ce titre de transport, validation échoué</h2>";
+							echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
 							exit;
+						} else {
+							//Ajout dans la table validation
+								//Requete d'ajout dans la base
+									$sql = "INSERT INTO validation VALUES ($numc, '$titrevalid', $borne, '".date('Y-m-d H:i:s')."', 1) ";
+									$result=pg_query($sql);
+
+								//Vérification du lancement de la requête
+									if (!$result) {
+										echo  "Probleme lors du lancement de la requete 4";
+										exit;
+									}
+
+
+							//Décrémentation dans la table soldecarte
+								if ($ligne['quantite'] == 1){
+									//Suppresion du solde de ce titre de transport pour cette carte car quantité qui arrive à 0
+										//Requete de supression
+											$sql = "DELETE FROM soldecarte WHERE numc = $numc and codet = '$titrevalid'";
+											$result=pg_query($sql);
+
+										//Vérification du lancement de la requête
+											if (!$result) {
+												echo  "Probleme lors du lancement de la requete 4";
+												exit;
+											}
+								} else {
+									//Décrémentation de la quantité de 1
+										//Requete de supression
+											$sql = "UPDATE soldecarte set quantite = quantite - 1 WHERE numc = $numc and codet = '$titrevalid'";
+											$result=pg_query($sql);
+
+										//Vérification du lancement de la requête
+											if (!$result) {
+												echo  "Probleme lors du lancement de la requete 4";
+												exit;
+											}
+								}
+
+
+							//Récupération du libellé du titre
+								//Requete pour le libellé
+									$sql = "SELECT libt from titretransport where codet='$titrevalid';";
+									$result=pg_query($sql);
+
+								//Vérification du lancement de la requête
+									if (!$result) {
+										echo  "Probleme lors du lancement de la requete 4";
+										exit;
+									}
+
+								$ligne = pg_fetch_array($result);
+
+
+							echo "<h2>Carte validée, titre de transport utilisée : ".$ligne['libt']." </h2>";
+							echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+							
 						}
-
-					$ligne = pg_fetch_array($result);
-
-
-				echo "<h2>Carté validée, titre de transport utilisée : ".$ligne['libt']." </h2>";
-				echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
-				
-
 			}
 		?>
 	</div>

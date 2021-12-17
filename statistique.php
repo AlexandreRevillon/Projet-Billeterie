@@ -83,10 +83,8 @@
 	<!--------------------- Fin de la barre de navigation --------------------->
 	
 	<div class="container">
-		<h1 class="text-center my-4">Profil</h1>
-
-		<h2>Informations personnelles:</h2>
-		<?php 
+	<h1 class="text-center my-4">Statistiques</h1>
+	<?php 
 			include 'Fonctions.php';
 			//Connexion à la base de données
     			include "connexion.php";
@@ -95,66 +93,35 @@
         			echo "Probleme de connexion à la base";
         			exit;
      			}
+	$sql="select 
+    libs, 
+    CASE WHEN nbvalid is null THEN 0 ELSE nbvalid END AS nbvalid2, 
+    CASE WHEN nbrecharge is null THEN 0 ELSE nbrecharge END AS nbrecharge2 
+from 
+    (select s.nums, s.libs, count(*) as nbvalid from validation natural join bornevalidation natural join station s where numc=".$_SESSION['carte']." group by s.nums ) as valid  natural full  join 
+    (select s.nums, s.libs, count(*) as nbrecharge from recharge natural join bornerecharge natural join station s where numc=".$_SESSION['carte']." group by s.nums) as recharge;";
 
-     		//Récupération des informations de l'utilisateur
-     			$sql = "SELECT * FROM utilisateur WHERE numu ='".$_SESSION['user']."';";
-     			$resultat = pg_query($sql);
-     			$user = pg_fetch_array($resultat);
-
-
-     		//Récupération des information de la carte associée
-     			$sql2 = "SELECT * FROM utilisateur NATURAL JOIN carte;";
-     			$resultat = pg_query($sql);
-     			$carte = pg_fetch_array($resultat);
-		 ?>
-
-		<p>Nom: <?php echo $user['nom']; ?></p>
-		<p>Prénom: <?php echo $user['prenom']; ?></p>
-		<p>Date de naissance: <?php echo date('d/m/Y',strtotime($user['dn']))." (".age($user['dn'])." ans)"; ?></p>
-		<p>Adresse: <?php echo $user['adresse']; ?></p>
-		<p>Email: <?php echo $user['email']; ?></p>
-
-		<h2>Informations carte :</h2>
-		<?php 
-			if (!isset($_SESSION['carte'])) {
-				echo "<p>Aucune carte associé à ce compte</p>";
-			} else {
-				echo "<p>Numéro de carte : ".$_SESSION['carte']."</p>";
-				
-				//Récupération des informations concernant l'abonnement
-     			$sql3 = "SELECT * FROM titretransport WHERE codet ='".$user['codet']."';";
-     			$resultat = pg_query($sql3);
-     			$abo = pg_fetch_array($resultat);
-
-     			if (isset($abo['libt'])) {
-     				$echeance = date('d/m/Y', strtotime($user['datedebutabo']. ' + '.$abo['dureevalidjour'].' days'));
-     				echo "<p>Abonnement : ".$abo["libt"]."</p>";
-     				echo "<p>Date d'échéance: $echeance</p>";
-    			} else {
-     				echo "<p>Abonnement : Pas d'abonnement en cours</p>";
-     			}
-				echo "<h3>Contenu de la carte :</h3>";
-
-				//Récupération des information du solde de la carte
-	     			$sql4 = "SELECT soldecarte.*, libt FROM soldecarte natural join titretransport WHERE numc = ".$_SESSION['carte'].";";
-	     			$resultat = pg_query($sql4);
-	     			$solde = pg_fetch_array($resultat);
-
-	     			echo "<ul>";
-	     			while ($solde) {
-	     				echo "<li>".$solde['libt']." - ".$solde['quantite']."</li>";
-	     				$solde = pg_fetch_array($resultat);
-	     			}
-	     			echo "</ul><br>";
-
-				echo "<a href='histo_valid.php' class='btn btn-info'>Historique des validations</a>";		
-				echo "<a href='histo_achat.php' class='btn btn-info'>Historique des achats</a>";
-				echo "<a href='statistique.php' class='btn btn-info'>Statistiques</a>";
-			}
-		?>
-
-	</div>
-	
-
-</body>
+    $result=pg_query($sql);
+//Vérification du lancement de la requête
+if (!$result) {
+echo  "Probleme lors du lancement de la requete ";
+exit;
+}
+?>
+    
+	<table class="table text-center table-hover table-striped">
+	<thead>
+	<tr><th>Station</th><th>Nombre de validations</th><th>Nombre de Rechargement</th>
+	</thead>
+	</tr>
+	<?php 
+	$ligne=pg_fetch_array($result);
+	while($ligne){
+        echo "<tr><td>".$ligne['libs']."</td><td>".$ligne['nbvalid2']."</td><td>".$ligne['nbrecharge2']."</td></tr>";
+        $ligne=pg_fetch_array($result);
+}
+	?>
+	</table>
+    </div>
+	</body>
 </html>

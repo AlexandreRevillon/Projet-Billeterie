@@ -2,3 +2,13 @@
 2) //nombre moyen de rechargement dans chaque station : select s.libs, count(r.numc) as nb_recharges from from recharge r natural join titretransport t natural join bornerecharge b natural join station s group by libs;
 
 3)// nombre de trajets moyens par abonnes : select numu, avg(select count(r.numc) from recharge r natural join carte c natural join utilisateur u group by u.numu) from utilisateur; (a voir)
+
+4)// effectifs des titres de transports achetes : select codet as titre_transport,count(codet) as nombre_titres from carte where numc='...' group by codet;
+
+5)// montant d'achat de tickets par mois : select sum(r.quantite*t.prix) as depense mensuelle from recharge r natural join titretransport t where numc='....' and dateheurerecharge BETWEEN ((ANNEE-MOIS-01 00:00:00) and (ANNEE-MOIS-31/30 23:59:59));
+
+6) // montant d'achat de tickets par mois pour chaque ticket: select r.codet,sum(r.quantite*t.prix) as depense mensuelle from recharge r natural join titretransport t where numc='....' and dateheurerecharge BETWEEN ((ANNEE-MOIS-01 00:00:00) and (ANNEE-MOIS-31/30 23:59:59)) group by r.codet;
+
+7)// rechargement moyen dans l'annee: select avg(r.quantite*t.prix) as depense mensuelle from recharge r natural join titretransport t where numc='....' and dateheurerecharge BETWEEN ((ANNEE-MOIS-01 00:00:00) and (ANNEE-MOIS-31/30 23:59:59));(faux a voir)
+
+8) extract (year from dataheurevalid)='2021'; pour que l'annee soit egale a 2021

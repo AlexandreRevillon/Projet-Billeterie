@@ -82,6 +82,8 @@
 </nav>
 <!--------------------- Fin de la barre de navigation --------------------->
 
+<div class="d-flex flex-column min-vh-100">
+
 <h1 class="text-center my-4">Page d'accueil</h1>
 
 <div class="container">
@@ -123,24 +125,65 @@
   <!-------------------- Fin du caroussel -------------------------->
 
   <div class="row mt-4">
-    <div class="card col-5">
-      <img src="..." class="card-img-top" alt="...">
+    <div class="card col-5 my-4">
+      <img src="pictures/harcelement.png" class="card-img-top" height="300px">
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <h5 class="card-title">Actu des réseaux</h5>
+        <p class="card-text">Du 22 au 27 novembre, semaine de lutte contre le harcèlement sur le réseau</p>
       </div>
     </div>
 
-    <div class="card col-5 offset-2">
-      <img src="..." class="card-img-top" alt="...">
+    <div class="card col-5 offset-2 my-4">
+      <img src="pictures/paul-klee.jpg" class="card-img-top" height="300px">
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <h5 class="card-title">A la une</h5>
+        <p class="card-text">LaM, Exposition Paul Klee, Entre-mondes</p>
       </div>
     </div>
   </div>
+
+</div>
+
+    <!-- Footer -->
+  <footer class="bg-dark text-center text-white mt-auto">
+    <!-- Grid container -->
+    <div class="container-fluid pt-4 p-0 row">
+      <!-- Section: Social media -->
+      <section class="mb-4 col-12">
+        <!-- Facebook -->
+        <a class="btn btn-floating m-1" href="https://www.facebook.com/ileviaLille/" role="button">
+          <img src="pictures/002-facebook.png">
+        </a>
+
+        <!-- Twitter -->
+        <a class="btn btn-floating m-1" href="https://twitter.com/ilevia_actu" role="button">
+          <img src="pictures/001-twitter.png">
+        </a>
+
+        <!-- Instagram -->
+        <a class="btn btn-floating m-1" href="instagram.com/ilevia.officiel/?hl=fr" role="button">
+          <img src="pictures/003-instagram.png">
+        </a>
+
+      </section>
+      <!-- Section: Social media -->
+
+      <!-- Section: Text -->
+      <section class="mb-4 col-12">
+        <p>
+          Ilévia - Les transports de la MEL
+        </p>
+      </section>
+      <!-- Section: Text -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3 col-12" style="background-color: rgba(0, 0, 0, 0.2);">
+      © 2021 Copyright:
+      Révillon - Tieha
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
 
 </div>
 </body>

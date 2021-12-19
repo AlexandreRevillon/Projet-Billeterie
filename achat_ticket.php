@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Abonnement</title>
+	<title>Ticket</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
@@ -92,7 +92,7 @@
 <!--------------------- Fin de la barre de navigation --------------------->
 
 
-
+<div class="d-flex flex-column min-vh-100">
 	<div class='container'>
 		<div class='col-8 offset-2'>
 			<h1 class='text-center my-4'>Achat - Ticket</h1>
@@ -337,5 +337,49 @@
 			?>
 		</div>
 	</div>
+
+
+    <!-- Footer -->
+  <footer class="bg-dark text-center text-white mt-auto">
+    <!-- Grid container -->
+    <div class="container-fluid pt-4 p-0 row">
+      <!-- Section: Social media -->
+      <section class="mb-4 col-12">
+        <!-- Facebook -->
+        <a class="btn btn-floating m-1" href="https://www.facebook.com/ileviaLille/" role="button">
+          <img src="pictures/002-facebook.png">
+        </a>
+
+        <!-- Twitter -->
+        <a class="btn btn-floating m-1" href="https://twitter.com/ilevia_actu" role="button">
+          <img src="pictures/001-twitter.png">
+        </a>
+
+        <!-- Instagram -->
+        <a class="btn btn-floating m-1" href="instagram.com/ilevia.officiel/?hl=fr" role="button">
+          <img src="pictures/003-instagram.png">
+        </a>
+
+      </section>
+      <!-- Section: Social media -->
+
+      <!-- Section: Text -->
+      <section class="mb-4 col-12">
+        <p>
+          Ilévia - Les transports de la MEL
+        </p>
+      </section>
+      <!-- Section: Text -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3 col-12" style="background-color: rgba(0, 0, 0, 0.2);">
+      © 2021 Copyright:
+      Révillon - Tieha
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+
+ </div>
 </body>
 </html>

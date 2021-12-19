@@ -1,9 +1,35 @@
 <?php 
 	include "session.php"; 
+
+
+
+  $footer = "<footer class='bg-dark text-center text-white mt-auto'>
+			    <div class='container-fluid pt-4 p-0 row'>
+			      <section class='mb-4 col-12'>
+			        <a class='btn btn-floating m-1' href='https://www.facebook.com/ileviaLille/' role='button'>
+			          <img src='pictures/002-facebook.png'>
+			        </a>
+			        <a class='btn btn-floating m-1' href='https://twitter.com/ilevia_actu' role='button'>
+			          <img src='pictures/001-twitter.png'>
+			        </a>
+			        <a class='btn btn-floating m-1' href='instagram.com/ilevia.officiel/?hl=fr' role='button'>
+			          <img src='pictures/003-instagram.png'>
+			        </a>
+			      </section>
+			      <section class='mb-4 col-12'>
+			        <p>
+			          Ilévia - Les transports de la MEL
+			        </p>
+			      </section>
+			    <div class='text-center p-3 col-12' style='background-color: rgba(0, 0, 0, 0.2);'>
+			      © 2021 Copyright:
+			      Révillon - Tieha
+			    </div>
+			  </footer>"
  ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -92,7 +118,7 @@
 </nav>
 <!--------------------- Fin de la barre de navigation --------------------->
 
-
+<div class="d-flex flex-column min-vh-100">
 	<div class="container">
 		<h1 class="text-center my-4">Validation</h1>
 		<br>
@@ -226,45 +252,61 @@
 								exit;
 							}
 
-
-						//Récupération du type de la carte
+						//Récupération de l'abonnement
 							$ligne=pg_fetch_array($result);
 							if (isset($ligne['codet'])) {
-								//Ajout dans la table validation
-									//Requete d'ajout dans la base
-										$sql = "INSERT INTO validation VALUES ($numc, '".$ligne['codet']."', $borne, '".date('Y-m-d H:i:s')."', 1) ";
-										$result=pg_query($sql);
-
-									//Vérification du lancement de la requête
-										if (!$result) {
-											echo  "Probleme lors du lancement de la requete 4";
-											echo "$sql";
-											exit;
-										}
-
-								//Récupération du libellé de l'abonnement utilisé
+								//il y a un abonnement sur la carte
 									//Recherche dans la base
-										$sql = "SELECT libt From titretransport where codet = '".$ligne['codet']."';";
-										$result=pg_query($sql);
+										$sql2 = "SELECT * From titretransport where codet = '".$ligne['codet']."';";
+										$result2=pg_query($sql2);
 
 									//Vérification du lancement de la requête
-										if (!$result) {
+										if (!$result2) {
 											echo  "Probleme lors du lancement de la requete 4";
 											exit;
 										}
 
-									//Récupération du libellé
-										$ligne=pg_fetch_array($result);
+										$ligne2=pg_fetch_array($result2);
+
+								//Vérification de la date de l'abonnement
+									if ( date('Y-m-d')>$ligne['datedebutabo'] && date('Y-m-d')<date('Y-m-d',strtotime($ligne['datedebutabo'].' + '.$ligne2['dureevalidjour'].' days'))) {
+										//Requete d'ajout dans la base
+											$sql = "INSERT INTO validation VALUES ($numc, '".$ligne['codet']."', $borne, '".date('Y-m-d H:i:s')."', 1) ";
+											$result=pg_query($sql);
+
+										//Vérification du lancement de la requête
+											if (!$result) {
+												echo  "Probleme lors du lancement de la requete 4";
+												exit;
+											}
+										
 										echo "<h2 class='text-center'>Carte validée, abonnement utilisé: ".$ligne['libt']."</h2>";
 										echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
-								exit;
-							}
+										echo "</div>";
+										echo $footer;
+
+										exit;
+									} else if(date('Y-m-d')>date('Y-m-d',strtotime($ligne['datedebutabo'].' + '.$ligne2['dureevalidjour'].' days'))) {
+										//Suppresion de l'abonnement car date échéance dépassée
+											$sql = "UPDATE utilisateur set codet = null, datedebutabo= null where numu = '".$_SESSION['user']."';";
+											$result=pg_query($sql);
+
+										//Vérification du lancement de la requête
+											if (!$result) {
+												echo  "Probleme lors du lancement de la requete 4";
+												exit;
+											}
+									}
+
+							} 
 					} 
 					
 				//Vérification de la présence de titres sur la carte
 					if ($solde == "" || count($solde) == 0) {
 						echo "<h2 class='text-center'>Il n'y a aucun titre de transport à valider sur cette carte</h2>";
 						echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
+						echo "</div>";
+						echo $footer;
 						exit;
 					}
 
@@ -287,7 +329,7 @@
 
 
 							//Vérification date de validité
-								if ( date('Y-m-d')<$titre['datedebut'] && $titre['datedebut']<date('Y-m-d',strtotime($titre['datedebut'].' + '.$ligne['dureevalidjour'].' days'))) {
+								if ( date('Y-m-d')>$titre['datedebut'] &&  date('Y-m-d')<date('Y-m-d',strtotime($titre['datedebut'].' + '.$ligne['dureevalidjour'].' days'))) {
 									//Ajout dans la table validation 
 										$sql = "INSERT INTO validation VALUES ($numc, '".$titre['codet']."', $borne, '".date('Y-m-d H:i:s')."', 1)";
 										$result=pg_query($sql);
@@ -297,11 +339,22 @@
 											echo  "Probleme lors du lancement de la requete 4";
 											exit;
 										}
-									echo "<h2 class=text-center'>Carte validée, pass utilisée : ".$ligne['libt']." </h2>";
+									echo "<h2 class='text-center'>Carte validée, pass utilisée : ".$ligne['libt']." </h2>";
 									echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
+									echo "</div>";
+									echo $footer;
 									exit;
-								 } 
+								 } else if(date('Y-m-d')>date('Y-m-d',strtotime($titre['datedebut'].' + '.$ligne['dureevalidjour'].' days'))) {
+								 	//Suppresion du pass car date échéance dépassée
+								 		$sql = "DELETE FROM soldecarte WHERE numc = $numc and codet='".$titre['codet']."';";
+								 		$result=pg_query($sql);
 
+									//Vérification du lancement de la requête
+										if (!$result) {
+											echo  "Probleme lors du lancement de la requete 4";
+											exit;
+										}
+								 }
 						}
 					}
 
@@ -314,6 +367,8 @@
 					if ($solde == "" || count($solde) == 0) {
 						echo "<h2 class='text-center'>Il n'y a aucun titre de transport à valider sur cette carte</h2>";
 						echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
+						echo "</div>";
+						echo $footer;
 						exit;
 					}
 
@@ -364,6 +419,8 @@
 
 							echo "<h2 class='text-center'>Pas assez de ce titre de transport, validation échoué</h2>";
 							echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
+							echo "</div>";
+							echo $footer;
 							exit;
 						} else {
 							//Ajout dans la table validation
@@ -425,6 +482,50 @@
 			}
 		?>
 	</div>
+
+    <!-- Footer -->
+  <footer class="bg-dark text-center text-white mt-auto">
+    <!-- Grid container -->
+    <div class="container-fluid pt-4 p-0 row">
+      <!-- Section: Social media -->
+      <section class="mb-4 col-12">
+        <!-- Facebook -->
+        <a class="btn btn-floating m-1" href="https://www.facebook.com/ileviaLille/" role="button">
+          <img src="pictures/002-facebook.png">
+        </a>
+
+        <!-- Twitter -->
+        <a class="btn btn-floating m-1" href="https://twitter.com/ilevia_actu" role="button">
+          <img src="pictures/001-twitter.png">
+        </a>
+
+        <!-- Instagram -->
+        <a class="btn btn-floating m-1" href="instagram.com/ilevia.officiel/?hl=fr" role="button">
+          <img src="pictures/003-instagram.png">
+        </a>
+
+      </section>
+      <!-- Section: Social media -->
+
+      <!-- Section: Text -->
+      <section class="mb-4 col-12">
+        <p>
+          Ilévia - Les transports de la MEL
+        </p>
+      </section>
+      <!-- Section: Text -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3 col-12" style="background-color: rgba(0, 0, 0, 0.2);">
+      © 2021 Copyright:
+      Révillon - Tieha
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+
+</div>
+  
 
 </body>
 </html>

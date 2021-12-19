@@ -52,20 +52,22 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
             </li>
-            
-            <li class="nav-item">
-                <?php 
+
+      </ul>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item">
+                <?php
                     if ($_SESSION['user'] != 'NA') {
                         echo "<a class='nav-link active' href='profil.php'>Profil</a>";
                     } else {
-                        echo "<a class='nav-link disabled' href='#' tabindex='-1' aria-disabled='true'>Profil</a>";
+                        echo "<a class='nav-link active' href='carte.php'>Carte</a>";
                     }
 
                  ?>
-                                
-            </li>
 
-            <?php 
+            </li>
+            <?php
                 if ($_SESSION['user'] != 'NA') {
                     echo " <li class='nav-item'>";
                         echo "<a class='nav-link active' href='disconnect.php'>Déconnexion</a>";
@@ -84,14 +86,13 @@
              ?>
 
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+
     </div>
   </div>
 </nav>
 <!--------------------- Fin de la barre de navigation --------------------->
+
+
 	<div class="container">
 		<h1 class="text-center my-4">Validation</h1>
 		<br>
@@ -105,84 +106,83 @@
 				//Blocage de la validation du formulaire si tout le formulaire n'est pas apparu en entier
 					$disabled = "disabled";
 
-				echo "<form action='validation.php' method='POST'>";
+				echo "<form action='validation.php' method='POST' class='form col-8 offset-2'>";
 					//Affichage de la liste déroulante des stations
-						echo "<label>Station: </label>";
-						echo "<select name='station' onchange='submit()'>";
-								echo "<option value='null'>--- Veuillez choisir une station---</option>";
+						echo "<div class='my-2 col-12'>";
+							echo "<label class='form-label'>Station: </label>";
+							echo "<select class='form-select' name='station' onchange='submit()'>";
+									echo "<option value='null'>--- Veuillez choisir une station---</option>";
 
-								//Requete de selection des stations
-									$sql1="SELECT * from station order by 1;";
-									$result1=pg_query($sql1);
+									//Requete de selection des stations
+										$sql1="SELECT * from station order by 1;";
+										$result1=pg_query($sql1);
 
-								//Vérification de l'execution de la requete
-									if (!$result1) {
-										echo  "Probleme lors du lancement de la requete 1";
-										exit;
-									}
-
-								//lecture des resultats et affichage en liste déroulante
-									$ligne1=pg_fetch_array($result1);
-									while($ligne1){
-										if (isset($station)) {
-											$selected = ($station == $ligne1['nums']) ? "selected" :"" ;
+									//Vérification de l'execution de la requete
+										if (!$result1) {
+											echo  "Probleme lors du lancement de la requete 1";
+											exit;
 										}
-										echo "<option value='".$ligne1['nums']."' $selected>".$ligne1['libs']."</option>";
-										$ligne1=pg_fetch_array($result1);
-									}
-							echo "</select>";
 
-					echo "<br>";
+									//lecture des resultats et affichage en liste déroulante
+										$ligne1=pg_fetch_array($result1);
+										while($ligne1){
+											if (isset($station)) {
+												$selected = ($station == $ligne1['nums']) ? "selected" :"" ;
+											}
+											echo "<option value='".$ligne1['nums']."' $selected>".$ligne1['libs']."</option>";
+											$ligne1=pg_fetch_array($result1);
+										}
+								echo "</select>";
+						echo "</div>";
+					
 
 					if (isset($station) && ($station != 'null')) {
 						//Si station choisie, affichage de la liste des bornes de la station
 
 						//Affichage de la liste déroulante des bornes
-							echo "<label>Borne de validation: </label>";
-							echo "<select name='borne' onchange='submit()'>";
-									echo "<option value='null'>---Veuillez choisir une borne de validation---</option>";
+							echo "<div class='my-2 col-12'>";
+								echo "<label class='form-label'>Borne de validation: </label>";
+								echo "<select class='form-select' name='borne' onchange='submit()'>";
+										echo "<option value='null'>---Veuillez choisir une borne de validation---</option>";
 
-										//Requete de selection des bornes reliées à la station
-											$sql2="SELECT * from bornevalidation where nums = $station;";
-											$result2=pg_query($sql2);
+											//Requete de selection des bornes reliées à la station
+												$sql2="SELECT * from bornevalidation where nums = $station;";
+												$result2=pg_query($sql2);
 
-										//Vérification du lancement de la requête
-											if (!$result2) {
-												echo  "Probleme lors du lancement de la requete 2";
-												exit;
-											}
-
-										//lecture des resultats et affichage en liste déroulante
-											$ligne2=pg_fetch_array($result2);
-											while($ligne2){
-												if (isset($station)) {
-													$selected2 = ($borne == $ligne2['codebv']) ? "selected" :"" ;
+											//Vérification du lancement de la requête
+												if (!$result2) {
+													echo  "Probleme lors du lancement de la requete 2";
+													exit;
 												}
-												echo "<option value='".$ligne2['codebv']."' $selected2> Borne n°".$ligne2['codebv']."</option>";
+
+											//lecture des resultats et affichage en liste déroulante
 												$ligne2=pg_fetch_array($result2);
-											}
-							echo "</select>";
+												while($ligne2){
+													if (isset($station)) {
+														$selected2 = ($borne == $ligne2['codebv']) ? "selected" :"" ;
+													}
+													echo "<option value='".$ligne2['codebv']."' $selected2> Borne n°".$ligne2['codebv']."</option>";
+													$ligne2=pg_fetch_array($result2);
+												}
+								echo "</select>";
+							echo "</div>";
 					}
 
-			 		echo "<br><br>";
+
 
 				 	if (isset($station) && ($station != 'null') && isset($borne) && ($borne != 'null')){
 						//Affichage du champ texte pour le numéro de la carte
-							echo "<label>Numéro de carte</label>";
+							echo "<label class='form-label'>Numéro de carte</label>";
 							$value_carte = (isset($_SESSION['carte'])) ? "value=".$_SESSION['carte'] : "" ;
-							echo "<input type='text' name='numc' placeholder='000000' $value_carte required>";
-
-						echo "<br>";
+							echo "<input class='form-control' type='text' name='numc' placeholder='000000' $value_carte required>";
 
 						//Tout le formulaire est affiché: on active la possibilité de valider le formulaire
 						$disabled = "";
 					}
 
-				 	echo "<br>";
-
 					//Affichage des bouton en bas du formulaire
-					 	echo "<input type='submit' class='btn btn-outline-success' name='validborne' value='Valider' $disabled>";
-					 	echo "<a href='index.php' class='btn btn-outline-danger'>Annuler</a>";
+					 	echo "<input type='submit' class='btn btn-outline-success my-4 offset-1 col-4' name='validborne' value='Valider' $disabled>";
+					 	echo "<a href='index.php' class='btn btn-outline-danger my-4 offset-2 col-4'>Annuler</a>";
 
 				echo "</form>";
 
@@ -238,6 +238,7 @@
 									//Vérification du lancement de la requête
 										if (!$result) {
 											echo  "Probleme lors du lancement de la requete 4";
+											echo "$sql";
 											exit;
 										}
 
@@ -254,16 +255,16 @@
 
 									//Récupération du libellé
 										$ligne=pg_fetch_array($result);
-										echo "<h2>Carte validée, abonnement utilisé: ".$ligne['libt']."</h2>";
-										echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+										echo "<h2 class='text-center'>Carte validée, abonnement utilisé: ".$ligne['libt']."</h2>";
+										echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
 								exit;
 							}
 					} 
 					
 				//Vérification de la présence de titres sur la carte
 					if ($solde == "" || count($solde) == 0) {
-						echo "<h2>Il n'y a aucun titre de transport à valider sur cette carte</h2>";
-						echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+						echo "<h2 class='text-center'>Il n'y a aucun titre de transport à valider sur cette carte</h2>";
+						echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
 						exit;
 					}
 
@@ -296,8 +297,8 @@
 											echo  "Probleme lors du lancement de la requete 4";
 											exit;
 										}
-									echo "<h2>Carte validée, pass utilisée : ".$ligne['libt']." </h2>";
-									echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+									echo "<h2 class=text-center'>Carte validée, pass utilisée : ".$ligne['libt']." </h2>";
+									echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
 									exit;
 								 } 
 
@@ -311,24 +312,28 @@
 
 				//Vérification de la présence de titres valide sur la carte
 					if ($solde == "" || count($solde) == 0) {
-						echo "<h2>Il n'y a aucun titre de transport à valider sur cette carte</h2>";
-						echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+						echo "<h2 class='text-center'>Il n'y a aucun titre de transport à valider sur cette carte</h2>";
+						echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
 						exit;
 					}
 
 				//Choix du titre de transport à utiliser
-					echo "<form method='POST' action='validation.php'>";
+					echo "<form method='POST' action='validation.php' class='form col-8 offset-2'>";
 					foreach ($solde as $key => $titre) {
 						if ($titre['type']!="Pass") {
-							echo "<input type='radio' name='titrevalid' id='".$titre['codet']."' value='".$titre['codet']."'><label for='".$titre['codet']."'>".$titre['libt']."</label>";
-							echo "<br>";
+							echo "<div class='input-group'>
+									<div class='input-group-text'>
+										<input class='form-check-input' type='radio' id='radio".$titre['codet']."' name='titrevalid' value='".$titre['codet']."'>
+									</div>
+									  	<label for='radio".$titre['codet']."' class='form-control'class='form-control'>".$titre['libt']."</label>
+								  </div>";
 						}
 					}
 					echo "<input type='hidden' name='borne' value='$borne'>";
 					echo "<input type='hidden' name='numc' value='$numc'>";
 
-		    		echo "<input align='center' type='submit' value='Valider' name='validtitre' class='btn btn-outline-success'>";
-		    		echo "<a href='index.php' class='btn btn-outline-danger'>Retour à l'accueil</a>";
+		    		echo "<input type='submit' value='Valider' name='validtitre' class='btn btn-outline-success col-4 offset-1 my-4'>";
+		    		echo "<a href='index.php' class='btn btn-outline-danger col-4 offset-2 my-4'>Retour à l'accueil</a>";
 					echo "</form>";
 
 			} else {
@@ -357,8 +362,8 @@
 										exit;
 									}
 
-							echo "<h2>Pas assez de ce titre de transport, validation échoué</h2>";
-							echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+							echo "<h2 class='text-center'>Pas assez de ce titre de transport, validation échoué</h2>";
+							echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
 							exit;
 						} else {
 							//Ajout dans la table validation
@@ -413,8 +418,8 @@
 								$ligne = pg_fetch_array($result);
 
 
-							echo "<h2>Carte validée, titre de transport utilisée : ".$ligne['libt']." </h2>";
-							echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+							echo "<h2 class='text-center'>Carte validée, titre de transport utilisée : ".$ligne['libt']." </h2>";
+							echo "<a href='index.php' class='btn btn-outline-info offset-5 col-2'>Retour à l'accueil</a>";
 							
 						}
 			}

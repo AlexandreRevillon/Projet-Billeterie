@@ -51,20 +51,22 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
             </li>
-            
-            <li class="nav-item">
-                <?php 
+
+      </ul>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item">
+                <?php
                     if ($_SESSION['user'] != 'NA') {
                         echo "<a class='nav-link active' href='profil.php'>Profil</a>";
                     } else {
-                        echo "<a class='nav-link disabled' href='#' tabindex='-1' aria-disabled='true'>Profil</a>";
+                        echo "<a class='nav-link active' href='carte.php'>Carte</a>";
                     }
 
                  ?>
-                                
-            </li>
 
-            <?php 
+            </li>
+            <?php
                 if ($_SESSION['user'] != 'NA') {
                     echo " <li class='nav-item'>";
                         echo "<a class='nav-link active' href='disconnect.php'>Déconnexion</a>";
@@ -83,14 +85,13 @@
              ?>
 
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+
     </div>
   </div>
 </nav>
 <!--------------------- Fin de la barre de navigation --------------------->
+
+
 	<div class="container">
 		<h1 class="text-center my-4">Achat - Carte</h1>
 		<br>
@@ -105,11 +106,12 @@
 					if (isset($_SESSION['carte'])) {
 						//Utilisateur à déjà une carte
 						echo "<h2 class='text-center'>Vous posséder déjà une carte personnelle, il n'est pas possible d'en avoir plusieurs.</h2>";
+						echo "<a href='index.php' class='p-2 text-center offset-5 col-2 btn btn-outline-info'>Retour à l'accueil</a><br>";
 
 					} else if (isset($valid)) {
 						//Simulation de paiement en cours
-						echo "<h2>Paiement en cours</h2>";
-						echo "<img src='https://i.stack.imgur.com/ATB3o.gif'>";
+						echo "<h2 class='text-center'>Paiement en cours</h2>";
+						echo "<img src='https://i.stack.imgur.com/ATB3o.gif' class='col-2 offset-5'>";
 						header("Refresh: 3;url=achat_carte.php?typec=CP&trasact=1");
 
 					} else if(isset($trasact)){
@@ -128,8 +130,9 @@
 							$numc = $ligne['numc']+1;
 
 							//Affichage du numéro de carte
-							echo "<h2>Achat réalisé avec succes</h2>";
-							echo "<p>Numéro de carte: $numc</p>";
+							echo "<h2 class='text-center'>Achat réalisé avec succes</h2>";
+							echo "<p class='text-center'>Numéro de carte: $numc</p>";
+							echo "<a href='index.php' class='p-2 text-center offset-5 col-2 btn btn-outline-info'>Retour à l'accueil</a><br>";
 
 							//Création du numéro de carte dans la BD + liaison avec l'utilisateur
 							$sql = "INSERT INTO carte VALUES ($numc, '".$_SESSION['user']."', 'CP')";
@@ -144,9 +147,9 @@
 
 					} else {
 						//Carte personnelle choisi: Affichage du prix + validation de l'achat
-						echo "<p>Carte personnelle \t Prix: 5€</p><br>";
-						echo "<a href='achat_carte.php?typec=CP&valid=1' class='btn btn-outline-success'>Valider mon achat</a>";
-						echo "<a href='index.php' class='btn btn-outline-danger'>Annuler</a>";
+						echo "<p class='text-center'>Carte personnelle \t Prix: 5€</p><br>";
+						echo "<a href='achat_carte.php?typec=CP&valid=1' class='btn btn-outline-success offset-3 col-2'>Valider mon achat</a>";
+						echo "<a href='index.php' class='btn btn-outline-danger offset-2 col-2'>Annuler</a>";
 					}
 
 
@@ -155,8 +158,8 @@
 					//Carte non personnelle 
 					if (isset($valid)) {
 						//Simulation de paiement en cours
-						echo "<h2>Paiement en cours</h2>";
-						echo "<img src='https://i.stack.imgur.com/ATB3o.gif'>";
+						echo "<h2 class='text-center'>Paiement en cours</h2>";
+						echo "<img class='col-2 offset-5' src='https://i.stack.imgur.com/ATB3o.gif'>";
 						header("Refresh: 3;url=achat_carte.php?typec=CNP&trasact=1");
 
 					} else if(isset($trasact)){
@@ -175,8 +178,9 @@
 							$numc = $ligne['numc']+1;
 
 							//Affichage du numéro de carte
-							echo "<h2>Achat réalisé avec succes</h2>";
-							echo "<p>Numéro de carte: $numc</p>";
+							echo "<h2 class='text-center'>Achat réalisé avec succes</h2>";
+							echo "<p class='text-center'>Numéro de carte: $numc</p>";
+							echo "<a href='index.php' class='p-2 text-center offset-5 col-2 btn btn-outline-info'>Retour à l'accueil</a><br>";
 
 							//Créatio du numéro de carte dans la BD
 							$sql = "INSERT INTO carte VALUES ($numc, NULL, 'CNP')";
@@ -187,21 +191,24 @@
 					        }
 
 					} else {
-						echo "<p>Carte non personnelle \t Prix: 1€</p><br>";
-						echo "<a href='achat_carte.php?typec=CNP&valid=1' class='btn btn-outline-success'>Valider mon achat</a>";
-						echo "<a href='index.php' class='btn btn-outline-danger'>Annuler</a>";
+						echo "<p class='text-center'>Carte non personnelle \t Prix: 1€</p><br>";
+						echo "<a href='achat_carte.php?typec=CNP&valid=1' class='btn btn-outline-success offset-3 col-2'>Valider mon achat</a>";
+						echo "<a href='index.php' class='btn btn-outline-danger offset-2 col-2'>Annuler</a>";
 					}
 
 				} else {
 					//Carte personelle et utilisateur pas connecté
 					echo "<h2 class='text-center'>Veuillez vous connecter ou vous inscrire d'abord</h2>";
+					echo "<a href='index.php' class='p-2 text-center offset-5 col-2 btn btn-outline-info'>Retour à l'accueil</a><br>";
 
 				}
 
 			} else {
 				//Choix de la carte pas encore fait
-				echo "<a href='achat_carte.php?typec=CP'>Carte personelle</a><br>";
-				echo "<a href='achat_carte.php?typec=CNP'>Carte non personelle</a><br>";
+				echo "<div class='row'>";
+					echo "<a href='achat_carte.php?typec=CP' class='p-4 text-center offset-3 col-2 btn btn-outline-primary'>Carte personelle</a><br>";
+					echo "<a href='achat_carte.php?typec=CNP' class='p-4 text-center offset-2 col-2 btn btn-outline-primary'>Carte non personelle</a><br>";
+				echo "</div>";
 			}
 		 ?>
 

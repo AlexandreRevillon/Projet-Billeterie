@@ -11,4 +11,4 @@
 
 7)// rechargement moyen dans l'annee: select avg(r.quantite*t.prix) as depense mensuelle from recharge r natural join titretransport t where numc='....' and dateheurerecharge BETWEEN ((ANNEE-MOIS-01 00:00:00) and (ANNEE-MOIS-31/30 23:59:59));(faux a voir)
 
-8) extract (year from dataheurevalid)='2021'; pour que l'annee soit egale a 2021
+8)

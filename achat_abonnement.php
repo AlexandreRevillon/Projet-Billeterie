@@ -51,20 +51,22 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
             </li>
-            
-            <li class="nav-item">
-                <?php 
+
+      </ul>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item">
+                <?php
                     if ($_SESSION['user'] != 'NA') {
                         echo "<a class='nav-link active' href='profil.php'>Profil</a>";
                     } else {
-                        echo "<a class='nav-link disabled' href='#' tabindex='-1' aria-disabled='true'>Profil</a>";
+                        echo "<a class='nav-link active' href='carte.php'>Carte</a>";
                     }
 
                  ?>
-                                
-            </li>
 
-            <?php 
+            </li>
+            <?php
                 if ($_SESSION['user'] != 'NA') {
                     echo " <li class='nav-item'>";
                         echo "<a class='nav-link active' href='disconnect.php'>Déconnexion</a>";
@@ -83,14 +85,13 @@
              ?>
 
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+
     </div>
   </div>
 </nav>
 <!--------------------- Fin de la barre de navigation --------------------->
+
+
 	<div class="container">
 		<h1 class="text-center my-4">Achat - Abonnement</h1>
 		<br>
@@ -101,9 +102,11 @@
 			if ($_SESSION['user']=="NA") {
 				//utilisateur pas connecté
 					echo "<h2 class='text-center'>Veuillez vous connecter ou vous inscrire d'abord</h2>";
+					echo "<a href='index.php' class='p-2 my-2 btn btn-outline-info vol-2 offset-5'>Retour à l'accueil</a>";
 			} else if (!isset($_SESSION['carte'])) {
 				//utilisateur n'a pas de carte
 					echo "<h2 class='text-center'>Vuos devez posséder une carte nominative pour pouvoir prendre un abonnement</h2>";
+					echo "<a href='index.php' class='p-2 my-2 btn btn-outline-info vol-2 offset-5'>Retour à l'accueil</a>";
 			}else {
 				//Vérification abonnement en cours
 					$sql = "SELECT * FROM utilisateur WHERE numu = '".$_SESSION['user']."';";
@@ -136,8 +139,8 @@
 					$echeance = date('Y-m-d', strtotime($ligne['datedebutabo']. ' + '.$ligne2['dureevalidjour'].' days'));
 
 					if ($echeance > date('Y-m-d')) {
-						echo "<h2>Vous possédez déjà un abonnement en cours de validité</h2>";
-						echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+						echo "<h2 class='text-center'>Vous possédez déjà un abonnement en cours de validité</h2>";
+						echo "<a href='index.php' class='p-2 my-2 btn btn-outline-info vol-2 offset-5'>Retour à l'accueil</a>";
 						exit;
 					}
 				}
@@ -157,8 +160,8 @@
 			        }
 					$ligne = pg_fetch_array($result);
 
-					echo "<h2>Paiement réussi</h2>";
-					echo "<a href='index.php' class='btn btn-outline-primary'>Retour à l'accueil</a>";
+					echo "<h2 class='text-center'>Paiement réussi</h2>";
+					echo "<a href='index.php' class='p-2 my-2 btn btn-outline-info vol-2 offset-5'>Retour à l'accueil</a>";
 
 
 				} else if (isset($valid)){
@@ -169,8 +172,8 @@
 							}
 							echo "<input type='hidden' name='transact' value='1'>";
 						echo "</form>";
-						echo "<h2>Paiement en cours</h2>";
-						echo "<img src='https://i.stack.imgur.com/ATB3o.gif'>";
+						echo "<h2 class='text-center'>Paiement en cours</h2>";
+						echo "<img class='col-2 offset-5' src='https://i.stack.imgur.com/ATB3o.gif'>";
 						echo "<script type='text/javascript'>
 							    function formSubmit(){
 							          document.getElementById('TheForm').submit();
@@ -196,31 +199,29 @@
 
 
 					//Affichage du numéro de carte
-					echo "<form method='POST' action='achat_abonnement.php'>";
-						echo "<label>Numéro de carte</label>";
-						echo "<input type='text' name='numc' value='".$_SESSION['carte']."' disabled>";
+					echo "<form method='POST' action='achat_abonnement.php' class='form col-8 offset-2 row'>";
+						echo "<div class='my-2 col-12'>";
+							echo "<labe class='form-label'>Numéro de carte</label>";
+							echo "<input class='form-control' type='text' name='numc' value='".$_SESSION['carte']."' disabled>";
+						echo "</div>";
+						
+						echo "<div class='my-2 col-12'>";
+							echo "<label class='form-label'>Abonnement: </label>";
+							echo "<select class='form-select' name='abo'>";
+								while ($ligne) {
+									echo "<option value='".$ligne['codet']."'>".$ligne['libt']."</option>";
+									$ligne = pg_fetch_array($result);
+								}
+							echo "</select>";
+						echo "</div>";
 
-						echo "<br>";
+						echo "<div class='my-2 col-12'>";
+							echo "<label class='form-label'>Date de debut</label>";
+							echo "<input class='form-control' type ='date' name='datedebut' required>";
+						echo "</div>";
 
-						echo "<label>Abonnement: </label>";
-						echo "<select name='abo'>";
-
-							while ($ligne) {
-								echo "<option value='".$ligne['codet']."'>".$ligne['libt']."</option>";
-								$ligne = pg_fetch_array($result);
-							}
-
-						echo "</select>";
-
-						echo "<br>";
-
-						echo "<label>Date de debut</label>";
-						echo "<input type ='date' name='datedebut' required>";
-
-						echo "<br>";
-
-			    		echo "<input align='center' type='submit' value='Acheter' name='valid' class='btn btn-outline-success'>";
-			    		echo "<a href='index.php' class='btn btn-outline-danger'>Retour à l'accueil</a>";
+			    		echo "<input align='center' type='submit' value='Acheter' name='valid' class='btn btn-outline-success offset-1 col-4 my-4'>";
+			    		echo "<a href='index.php' class='btn btn-outline-danger offset-2 col-4 my-4'>Retour à l'accueil</a>";
 
 					echo "</form>";
 

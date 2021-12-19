@@ -1,5 +1,5 @@
-<?php
-    include "session.php";
+<?php 
+    include "session.php"; 
  ?>
 
 <!DOCTYPE html>
@@ -10,6 +10,15 @@
 	<title>Document</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script type='text/javascript'>
+		function submitBday() {
+		    var Bdate = document.getElementById('bday').value;
+		    var Bday = +new Date(Bdate);
+		    var Age = ~~ ((Date.now() - Bday) / (31557600000))+'ans';
+		    var theBday = document.getElementById('resultBday');
+		    theBday.innerHTML = Age;
+		}
+	</script>
 </head>
 <body>
 <!------------------------- Barre de navigation ------------------------->
@@ -83,59 +92,83 @@
 
 
 
+
+
 	<div class="container">
-		<h1 class="text-center my-4">Historique des achats</h1>
+		<h1 class="text-center my-4">Profil</h1>
 
-    <?php
-      //Connexion à la base de données
-          include "connexion.php";
-          $con=connect();
-          if (!$con) {
-              echo "Probleme de connexion à la base";
-              exit;
-          }
+		
+		<?php 
+			include 'Fonctions.php';
+			//Connexion à la base de données
+    			include "connexion.php";
+    			$con=connect();
+    			if (!$con) {
+        			echo "Probleme de connexion à la base";
+        			exit;
+     			}
+     	?>
 
-      extract($_GET);
 
-      $carte = (isset($carte)) ? $carte : $_SESSION['carte'];
+			
+			<?php 
+				extract($_POST);
 
-      $sql="select t.libt,s.libs,r.codebr,r.dateheurerecharge,r.quantite from recharge r natural join titretransport t natural join bornerecharge b natural join station s where numc='$carte'";
-      $result=pg_query($sql);
+				if (isset($carte)){
+					$sql="SELECT * from carte where numc=$carte";
+					$result=pg_query($sql);
 
-      //Vérification de l'execution de la requete
-      if (!$result) {
-          echo  "Probleme lors du lancement de la requete ";
-          exit;
-      }
+				//Vérification de l'execution de la requete
+			      if (!$result) {
+			          echo  "Probleme lors du lancement de la requete ";
+			          exit;
+			      }
 
-      //lecture des resultats et affichage sous forme de tableau
-      $ligne=pg_fetch_array($result);
+			     $ligne=pg_fetch_array($result);
 
-      ?>
+			    if (isset($ligne['numc'])){
+			    	echo "<h2 class='my-4'>Informations carte :</h2>";
 
-      <table class="table table-striped table-hover text-center">
-        <thead>
-          <tr>
-              <th>Titre de transport</th>
-              <th>Station</th>
-              <th>Borne achat</th>
-              <th>Date et heure - Recharge</th>
-              <th>Quantité</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php while($ligne){
-              echo '<tr><td>'.$ligne['libt'].'</td><td>'.$ligne['libs'].'</td><td>'.$ligne['codebr'].'</td><td>'.$ligne['dateheurerecharge'].'</td><td>'.$ligne['quantite'].'</td>
-              </tr>';
-              $ligne=pg_fetch_array($result);
-          }
-          ?>
-        </tbody>
-      </table>
+					echo "<p>Numéro de carte : $carte</p>";
+	     			
+					echo "<h3>Contenu de la carte :</h3>";
 
-      <a class='btn btn-outline-info my-4 offset-5 col-2' href="index.php">Retour à l'accueil</a>
+					//Récupération des information du solde de la carte
+		     			$sql4 = "SELECT soldecarte.*, libt FROM soldecarte natural join titretransport WHERE numc = $carte;";
+		     			$resultat = pg_query($sql4);
+		     			$solde = pg_fetch_array($resultat);
 
+		     			echo "<ul>";
+		     			while ($solde) {
+		     				echo "<li>".$solde['libt']." - ".$solde['quantite']."</li>";
+		     				$solde = pg_fetch_array($resultat);
+		     			}
+		     			echo "</ul><br>";
+				
+					echo "<div class='my-4 row'>";
+						echo "<a href='histo_valid.php?carte=$carte' class='btn btn-info col-12 my-2'>Historique des validations</a>	";	
+						echo "<a href='histo_achat.php?carte=$carte' class='btn btn-info col-12 my-2'>Historique des achats</a>";
+						echo "<a href='statistique.php?carte=$carte' class='btn btn-info col-12 my-2'>Statistiques</a>";
+					echo "</div>";
+			    } else {
+			    	echo "<h2 class='text-center my-2'>Ce numéro de carte n'existe pas</h2>";
+			    	echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5 my-4'>Retour à l'accueil</a>";
+			    }
+
+				} else {
+					echo "<form method='POST' action='carte.php' class='form col-8 offset-2'>";
+						echo "<div class='col-12'>";
+							echo "<label class='form-label'>Numéro de carte</label>";
+							echo "<input class='form-control' name='carte' placeholder='000000'>";
+						echo "</div>";
+						echo "<input type='submit' value='Valider' class='btn btn-outline-success col-4 offset-1 my-4'>";
+						echo "<a href='index.php' class='btn btn-outline-danger col-4 offset-2 my-4'>Retour à l'accueil</a>";
+					echo "</form>";
+				}
+			?>
+		</div>
 	</div>
+
 
 </body>
 </html>

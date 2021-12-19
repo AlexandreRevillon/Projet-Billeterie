@@ -43,18 +43,20 @@
                 <a class="nav-link active" aria-current="page" href="validation.php">Validation</a>
             </li>
 
-            <li class="nav-item">
+      </ul>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item">
                 <?php
                     if ($_SESSION['user'] != 'NA') {
                         echo "<a class='nav-link active' href='profil.php'>Profil</a>";
                     } else {
-                        echo "<a class='nav-link disabled' href='#' tabindex='-1' aria-disabled='true'>Profil</a>";
+                        echo "<a class='nav-link active' href='carte.php'>Carte</a>";
                     }
 
                  ?>
 
             </li>
-
             <?php
                 if ($_SESSION['user'] != 'NA') {
                     echo " <li class='nav-item'>";
@@ -74,10 +76,7 @@
              ?>
 
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+
     </div>
   </div>
 </nav>
@@ -97,19 +96,19 @@
       </div>
       <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="5000">
-          <img src="logo.jpg" class="d-block w-100 col-6" alt="...">
+          <img src="pictures/logo.jpg" class="d-block w-100 col-6" alt="...">
           <div class="carousel-caption d-none d-md-block">
           </div>
         </div>
         <div class="carousel-item" data-bs-interval="5000">
-          <img src="vlille.jpg" class="d-block w-100" alt="...">
+          <img src="pictures/vlille.jpg" class="d-block w-100" alt="...">
           <div class="carousel-caption d-none d-md-block text-white">
             <h5>V'Lille</h5>
             <p>Une nouvelle façons de se déplacer sur la MEL</p>
           </div>
         </div>
         <div class="carousel-item" data-bs-interval="5000">
-          <img src="greve.png" class="d-block w-100" alt="...">
+          <img src="pictures/greve.png" class="d-block w-100" alt="...">
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">

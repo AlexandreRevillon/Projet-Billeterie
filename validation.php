@@ -280,7 +280,7 @@
 												exit;
 											}
 										
-										echo "<h2 class='text-center'>Carte validée, abonnement utilisé: ".$ligne['libt']."</h2>";
+										echo "<h2 class='text-center'>Carte validée, abonnement utilisé: ".$ligne2['libt']."</h2>";
 										echo "<a href='index.php' class='btn btn-outline-info col-2 offset-5'>Retour à l'accueil</a>";
 										echo "</div>";
 										echo $footer;
